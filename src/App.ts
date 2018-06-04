@@ -10,6 +10,8 @@ class App {
     constructor() {
         this.express = express();
         this.express.use(cors());
+        console.log(Settings.rootDir + '/public');
+        this.express.use('/files', express.static(Settings.rootDir + '/public'));
         this.mountRoutes();
     }
 
