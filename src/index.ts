@@ -1,8 +1,15 @@
 import app from './App';
 import { Settings } from '../settings';
+import { MongoServer } from './Mongo';
+import { TrackController } from './controllers/trackController';
 
-app.listen(Settings.port, err=>{
-    if(err) return console.error('app.listen', err);
+var dataAccess = new MongoServer();
+dataAccess.openDb().then(()=>{
+    var studentController = new TrackController(app, dataAccess);
 
-    return console.log('listening on port', Settings.port);
-});
+    app.listen(Settings.port, err=>{
+        if(err) return console.error('app.listen', err);
+    
+        return console.log('listening on port', Settings.port);
+    });
+}, err=> console.error('could not open mongo', err));

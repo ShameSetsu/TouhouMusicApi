@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { Settings } from '../settings';
 import { ApiRoutes } from './routes/routes.main';
-import * as  cors from 'cors';
+import * as cors from 'cors';
 
 class App {
     public express;
@@ -28,7 +28,7 @@ class App {
         });
         this.RoutesService.importRoutes(router);
         this.express.use('/', router);
-    }   
+    }
 }
 
 export default new App().express
