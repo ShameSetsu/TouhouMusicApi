@@ -11,6 +11,7 @@ class App {
         this.express = express();
         this.express.use(cors());
         this.express.use('/files', express.static(Settings.rootDir + '/public'));
+        console.log('public', Settings.rootDir + '/public');
         this.express.use((req, res, next)=>{
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
