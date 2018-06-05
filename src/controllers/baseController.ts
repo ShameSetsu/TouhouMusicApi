@@ -4,6 +4,11 @@ import * as express from 'express';
 export class BaseController {
     dataAccess: MongoServer;
     socket: any;
+    collection: any;
+
+    initCollection(collection: string){
+        this.collection = this.dataAccess.dbConnection.collection(collection);
+    }
 
     // Send an error message.
     sendErrorMessage = (res: express.Response, e?: Error) => {

@@ -3,17 +3,18 @@ import * as express from 'express';
 import { TrackOutDto } from '../models/outDto/trackOutDto.model';
 import { MongoServer } from '../Mongo';
 import { BaseController } from './baseController';
+import { EventOutDto } from '../models/outDto/eventOutDto.model';
 
 export class TrackController extends BaseController {
     constructor(app: express.Express, mongo: MongoServer) {
         super();
         this.dataAccess = mongo;
-        this.initCollection('track');
-        app.get('/test/track', this.getTrackTest());
-        app.post('/test/track', this.postTrackTest());
+        this.initCollection('event');
+        app.get('/test/event', this.getEventTest());
+        app.post('/test/event', this.postEventTest());
     }
 
-    getTrackTest = (): any => {
+    getEventTest = (): any => {
         return (req, res) => {
             this.collection.find({}).toArray(function (err, result) {
                 if (result) {
@@ -26,17 +27,12 @@ export class TrackController extends BaseController {
         }
     }
 
-    postTrackTest = () => {
+    postEventTest = () => {
         return (req, res) => {
-            let track: TrackOutDto = {
-                artist: 'ankimo',
-                duration: '4.23',
-                genre: ['metal'],
-                release: new Date(Date.now()),
-                title: 'perverseness',
-                url: 'localhost:3000/files/music/001.mp3'
+            let event: EventOutDto = {
+                name: '例大祭15'
             };
-            this.collection.insertOne(JSON.stringify(track), (err, result) => {
+            this.collection.insertOne(JSON.stringify(event), (err, result) => {
                 if (result) {
                     res.send(result);
                 }

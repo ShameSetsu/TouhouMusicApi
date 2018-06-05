@@ -5,7 +5,7 @@ import { TrackController } from './controllers/trackController';
 
 var dataAccess = new MongoServer();
 dataAccess.openDb().then(()=>{
-    var studentController = new TrackController(app, dataAccess);
+    var trackController = new TrackController(app, dataAccess);
 
     app.listen(Settings.port, err=>{
         if(err) return console.error('app.listen', err);
