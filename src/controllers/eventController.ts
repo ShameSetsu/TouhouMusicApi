@@ -5,7 +5,7 @@ import { MongoServer } from '../Mongo';
 import { BaseController } from './baseController';
 import { EventOutDto } from '../models/outDto/eventOutDto.model';
 
-export class TrackController extends BaseController {
+export class EventController extends BaseController {
     constructor(app: express.Express, mongo: MongoServer) {
         super();
         this.dataAccess = mongo;

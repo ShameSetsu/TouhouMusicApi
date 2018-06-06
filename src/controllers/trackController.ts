@@ -3,6 +3,7 @@ import * as express from 'express';
 import { TrackOutDto } from '../models/outDto/trackOutDto.model';
 import { MongoServer } from '../Mongo';
 import { BaseController } from './baseController';
+import { AlbumTrackInDto } from '../models/inDto/albumTrackInDto.model';
 
 export class TrackController extends BaseController {
     constructor(app: express.Express, mongo: MongoServer) {
@@ -15,7 +16,7 @@ export class TrackController extends BaseController {
 
     getTrackTest = (): any => {
         return (req, res) => {
-            this.collection.find({}).toArray(function (err, result) {
+            this.collection.find({}).toArray((err, result) => {
                 if (result) {
                     res.send(result);
                 }
@@ -45,5 +46,11 @@ export class TrackController extends BaseController {
                 }
             });
         }
+    }
+
+    insertMany(inDto: Array<AlbumTrackInDto>) {
+        return new Promise((resolve, reject)=>{
+
+        });
     }
 }

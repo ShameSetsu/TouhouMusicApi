@@ -2,10 +2,13 @@ import app from './App';
 import { Settings } from '../settings';
 import { MongoServer } from './Mongo';
 import { TrackController } from './controllers/trackController';
+import { AlbumController } from './controllers/albumController';
 
-var dataAccess = new MongoServer();
+const dataAccess = new MongoServer();
 dataAccess.openDb().then(()=>{
-    var trackController = new TrackController(app, dataAccess);
+    
+    const trackController = new TrackController(app, dataAccess);
+    const albumController = new AlbumController(app, dataAccess);
 
     app.listen(Settings.port, err=>{
         if(err) return console.error('app.listen', err);
