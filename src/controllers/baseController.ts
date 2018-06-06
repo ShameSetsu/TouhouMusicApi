@@ -12,7 +12,7 @@ export class BaseController {
     }
 
     // Send an error message.
-    sendErrorMessage = (res: express.Response, e?: Error) => {
+    sendErrorMessage = (res, e?) => {
         if (e) {
             var ex = JSON.stringify(e);
             return res.status(400).json({ Message: e.message, ExceptionMessage: ex });

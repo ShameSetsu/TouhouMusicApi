@@ -5,7 +5,7 @@ import { AlbumController } from './albumController';
 import { BaseController } from './baseController';
 import { TrackController } from './trackController';
 import { HttpStatus } from '../models/misc/httpStatus.enum';
-import { Settings } from '../../settings';
+import { Settings } from '../settings';
 import * as uuidv1 from 'uuid/v1';
 
 export class MusicController extends BaseController {
@@ -34,34 +34,14 @@ export class MusicController extends BaseController {
         }
     }
 
-    copyFile(file): Promise<string> {
-        return new Promise((resolve, reject) => {
-            let uid = uuidv1() + '.' + file.name.split('.').pop();
-            file.mv(Settings.rootDir + '/public/music/' + uid, (err) => {
-                if (err) reject(err);
-                resolve(uid);
-            });
-        })
-    }
-
-    copyFiles(files): Promise<Array<string>> {
-        const promises: Array<Promise<string>> = files.map(file => new Promise((resolve, reject) => {
-            let uid = uuidv1() + '.' + file.name.split('.').pop();
-            file.mv(Settings.rootDir + '/public/music/' + uid, (err) => {
-                if (err) reject(err);
-                resolve(uid);
-            });
-        }));
-        return Promise.all(promises);
-    }
-
     postAlbum = () => {
         return (req, res) => {
+            res.send('received', req);
+            /*
             const payload: AlbumInDto = mapToAlbumInDto(req.body);
 
             // CONVERT TO MONGO OBJECTS
-            //
-            const tracks = payload.tracks.map(track => {
+            const tracks: Array<Track> = payload.tracks.map(track => {
                 return <Track>{
                     title: track.title,
                     artist: payload.artist,
@@ -78,7 +58,7 @@ export class MusicController extends BaseController {
             let albumDuration = 0;
             payload.tracks.forEach(track => albumDuration += track.duration);
 
-            const album = <Album>{
+            const album: Album = <Album>{
                 name: payload.name,
                 artist: payload.artist,
                 event: payload.event,
@@ -93,7 +73,18 @@ export class MusicController extends BaseController {
 
                     res.send('success');
                 }, err => { throw ('trackCtrl.insertMany' + err) })
-            }, err => { throw ('albumCtrl.insertOne' + err) });
+            }, err => { throw ('albumCtrl.insertOne' + err) });*/
         }
+    }
+
+    copyFiles(files): Promise<Array<string>> {
+        const promises: Array<Promise<string>> = files.map(file => new Promise((resolve, reject) => {
+            let uid = uuidv1() + '.' + file.name.split('.').pop();
+            file.mv(Settings.rootDir + '/public/music/' + uid, (err) => {
+                if (err) reject(err);
+                resolve(uid);
+            });
+        }));
+        return Promise.all(promises);
     }
 }

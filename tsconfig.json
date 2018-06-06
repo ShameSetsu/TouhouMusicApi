@@ -2,8 +2,14 @@
   "compilerOptions": {
     "target": "es2018",
     "module": "commonjs",
+    "declaration": false,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "removeComments": true,
     "outDir": "dist",
+    "rootDir": "src", 
     "sourceMap": true,
+    "noLib": false,
     "allowSyntheticDefaultImports": true,
     "lib": ["es2018"]
   },
@@ -12,7 +18,7 @@
     "./node_modules/@types/node/index.d.ts"
   ],
   "include": [
-    "src/**/*"
+    "**/*"
   ],
   "exclude": [
     "node_modules"

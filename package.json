@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tsc": "tsc",
     "babel-node": "babel-node --presets=latest",
-    "start": "tsc & babel-node ./dist/src/index.js",
+    "start": "rd /s /q dist & tsc & npm run copy-files & babel-node ./dist/index.js",
+    "copy-files": "npm run copy-views & npm run copy-public",
+    "copy-views": "copyfiles -f src/views/* dist/views",
+    "copy-public": "copyfiles -f src/public/music/* dist/public/music & copyfiles -f src/public/styles/* dist/public/views",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ShameiSetsu",
@@ -15,6 +17,7 @@
     "@types/mocha": "^5.2.1",
     "@types/node": "^10.3.0",
     "cors": "^2.8.4",
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-fileupload": "^0.4.0",
     "install": "^0.11.0",
@@ -24,12 +27,21 @@
     "q": "^1.5.1",
     "typescript": "^2.9.1",
     "typescript-eslint-parser": "^16.0.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "rxjs": "5.5.11"
   },
   "devDependencies": {
+    "@angular/common": "^5.2.0",
+    "@angular/core": "^5.2.0",
+    "@angular/forms": "^5.2.0",
+    "@angular/http": "^5.2.0",
+    "@angular/platform-browser": "^5.2.0",
+    "@angular/platform-browser-dynamic": "^5.2.0",
+    "@angular/cli": "^6.0.8",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-preset-latest": "^6.24.1"
+    "babel-preset-latest": "^6.24.1",
+    "copyfiles": "^2.0.0"
   },
   "babel": {
     "presets": [

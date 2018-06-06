@@ -1,4 +1,4 @@
-import { Settings } from '../settings';
+import { Settings } from './settings';
 import app from './App';
 import { AlbumController } from './controllers/albumController';
 import { TrackController } from './controllers/trackController';

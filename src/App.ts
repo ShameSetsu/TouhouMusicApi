@@ -2,7 +2,7 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as fileUpload from 'express-fileupload';
 
-import { Settings } from '../settings';
+import { Settings } from './settings';
 import { ApiRoutes } from './routes/routes.main';
 
 class App {
@@ -13,6 +13,8 @@ class App {
         this.express = express();
         this.express.getRouter = () => { return express.Router() };
         this.express.use(cors());
+        this.express.set('views', Settings.rootDir + '/views');
+        this.express.set('view engine', 'ejs');
         this.express.use(fileUpload({ fileSize: 314572800 })); // limit = 300 Mo
         this.express.use('/files', express.static(Settings.rootDir + '/public'));
         this.express.use((req, res, next) => {
@@ -24,14 +26,17 @@ class App {
     }
 
     mountRoutes(): void {
-        const router = express.Router();
-        router.get('/', (req, res) => {
+        const app = express.Router();
+        app.get('/', (req, res) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            res.send('TouhouMusicApi ver.' + Settings.version)
+            res.send('TouhouMusicApi ver.' + Settings.version);
         });
-        this.RoutesService.importRoutes(router);
-        this.express.use('/', router);
+        app.get('/admin/add/album', (req, res)=>{
+            res.render('album-form');
+        })
+        this.RoutesService.importRoutes(app);
+        this.express.use('/', app);
     }
 }
 export default new App().express

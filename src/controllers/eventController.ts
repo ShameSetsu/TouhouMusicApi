@@ -4,7 +4,7 @@ import { MongoServer } from '../Mongo';
 import { BaseController } from './baseController';
 
 export class EventController extends BaseController {
-    constructor(app: express.Express, mongo: MongoServer) {
+    constructor(app, mongo) {
         super();
         this.dataAccess = mongo;
         this.initCollection('event');

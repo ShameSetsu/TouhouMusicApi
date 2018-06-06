@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <link rel="stylesheet" type="text/css" href="/styles/album-form.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+</head>
+
+<body>
+    <script>
+        // Rewrite the paths to load the files
+        System.paths = {
+            'angular2/*': '/vendor/angular2/*.js', // Angular
+            'rtts_assert/*': '/vendor/rtts_assert/*.js', // Runtime assertions
+            'rx/*': '/vendor/node_modules/rx/*.js',
+            'todo-app': 'components/todo-app/todo-app.es6', // The todo-app component
+            'xhr-factory': 'services/xhr-factory.es6', // The todo-factory Service
+            'todos-factory': 'services/todos-factory.es6' // The todo-factory Service
+        };
+
+        // Kick off the todo-application
+        System.import('todo-app');
+    </script>
+    <!-- <div class="container">
+        <form action="/api/album" method="post">
+            <fieldset>
+
+            </fieldset>
+        </form>
+    </div> -->
+</body>
