@@ -1,12 +1,13 @@
-import { MongoServer } from '../Mongo';
 import * as express from 'express';
+
+import { MongoServer } from '../Mongo';
 
 export class BaseController {
     dataAccess: MongoServer;
     socket: any;
     collection: any;
 
-    initCollection(collection: string){
+    initCollection(collection: string) {
         this.collection = this.dataAccess.dbConnection.collection(collection);
     }
 

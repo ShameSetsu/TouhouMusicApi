@@ -1,11 +1,11 @@
-export type TrackOutDto = {
+export type Track = {
     originalTitle?: string,
     title: string,
     artist: string,
-    duration: string,
+    duration: number,
     release: Date,
     genre: Array<string>,
-    url: string,
+    file: string,
     vocal?: string,
     arrangement?: string,
     lyrics?: string

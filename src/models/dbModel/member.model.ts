@@ -1,4 +1,4 @@
-export type MemberOutDto = {
+export type Member = {
     firstName?: string,
     lastName?: string,
     nickname?: string,

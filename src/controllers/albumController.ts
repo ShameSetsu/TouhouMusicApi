@@ -1,10 +1,7 @@
 import * as express from 'express';
 
-import { TrackOutDto } from '../models/outDto/trackOutDto.model';
+import { AlbumInDto } from '../models/inDto/albumInDto.model';
 import { MongoServer } from '../Mongo';
-import { BaseController } from './baseController';
-import { AlbumOutDto } from '../models/outDto/albumOutDto.model';
-import { AlbumInDto, mapToAlbumInDto } from '../models/inDto/albumInDto.model';
 
 export class AlbumController {
     collection;
@@ -22,14 +19,14 @@ export class AlbumController {
                     res.send(result);
                 }
                 else {
-                    throw(err);
+                    throw (err);
                 }
             });
         }
     }
 
     insertOne(inDto: AlbumInDto): Promise<any> {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             this.collection.insertOne(JSON.stringify(inDto), (err, result) => {
                 if (result) {
                     resolve(result);

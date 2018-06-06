@@ -1,9 +1,8 @@
 import * as express from 'express';
 
-import { TrackOutDto } from '../models/outDto/trackOutDto.model';
+import { Track } from '../models/dbModel/track.model';
 import { MongoServer } from '../Mongo';
 import { BaseController } from './baseController';
-import { AlbumTrackInDto } from '../models/inDto/albumTrackInDto.model';
 
 export class TrackController extends BaseController {
     constructor(app: express.Express, mongo: MongoServer) {
@@ -29,13 +28,13 @@ export class TrackController extends BaseController {
 
     postTrackTest = () => {
         return (req, res) => {
-            let track: TrackOutDto = {
+            let track: Track = {
                 artist: 'ankimo',
-                duration: '4.23',
+                duration: 233,
                 genre: ['metal'],
                 release: new Date(Date.now()),
                 title: 'perverseness',
-                url: 'localhost:3000/files/music/001.mp3'
+                file: '001.mp3'
             };
             this.collection.insertOne(JSON.stringify(track), (err, result) => {
                 if (result) {
@@ -48,8 +47,8 @@ export class TrackController extends BaseController {
         }
     }
 
-    insertMany(inDto: Array<AlbumTrackInDto>) {
-        return new Promise((resolve, reject)=>{
+    insertMany(inDto: Array<Track>) {
+        return new Promise((resolve, reject) => {
 
         });
     }

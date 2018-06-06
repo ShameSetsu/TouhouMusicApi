@@ -1,9 +1,7 @@
 import * as express from 'express';
 
-import { TrackOutDto } from '../models/outDto/trackOutDto.model';
 import { MongoServer } from '../Mongo';
 import { BaseController } from './baseController';
-import { EventOutDto } from '../models/outDto/eventOutDto.model';
 
 export class EventController extends BaseController {
     constructor(app: express.Express, mongo: MongoServer) {
@@ -29,9 +27,8 @@ export class EventController extends BaseController {
 
     postEventTest = () => {
         return (req, res) => {
-            let event: EventOutDto = {
-                name: '例大祭15'
-            };
+            let event: string = '例大祭15';
+
             this.collection.insertOne(JSON.stringify(event), (err, result) => {
                 if (result) {
                     res.send(result);

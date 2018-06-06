@@ -1,8 +1,9 @@
-export type AlbumOutDto = {
+export type Album = {
+    name: string,
     release: Date,
     nbTracks: number,
     event: string,
     artist: string,
-    length?: string,
+    duration?: number,
     website?: string
 }
