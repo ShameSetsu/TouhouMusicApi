@@ -32,9 +32,6 @@ class App {
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             res.send('TouhouMusicApi ver.' + Settings.version);
         });
-        app.get('/admin/add/album', (req, res)=>{
-            res.render('album-form');
-        })
         this.RoutesService.importRoutes(app);
         this.express.use('/', app);
     }

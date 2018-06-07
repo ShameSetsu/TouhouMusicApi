@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es2017",
     "module": "commonjs",
     "declaration": false,
     "experimentalDecorators": true,
@@ -11,7 +11,7 @@
     "sourceMap": true,
     "noLib": false,
     "allowSyntheticDefaultImports": true,
-    "lib": ["es2018"]
+    "lib": ["es2017"]
   },
   "files": [
     "./node_modules/@types/mocha/index.d.ts",
@@ -21,6 +21,7 @@
     "**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/angular/*"
   ],
 }
