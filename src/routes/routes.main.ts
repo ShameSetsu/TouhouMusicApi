@@ -19,7 +19,7 @@ export class ApiRoutes {
         });
         app.get('/angular', (req, res)=>{
             console.log('/angular');
-            res.status(HttpStatus.SUCCESS).sendFile(path.join(Settings.rootDir + '/public/angular/index.html'));
+            res.sendFile(path.join(Settings.rootDir + '/public/angular/index.html'));
         })
     }
 }

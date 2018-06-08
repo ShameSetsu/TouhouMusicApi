@@ -17,6 +17,7 @@ class App {
         this.express.set('view engine', 'ejs');
         this.express.use(fileUpload({ fileSize: 314572800 })); // limit = 300 Mo
         this.express.use('/files', express.static(Settings.rootDir + '/public'));
+        this.express.use(express.static(Settings.rootDir + '/public/angular'));
         this.express.use((req, res, next) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
