@@ -1,0 +1,28 @@
+<form [formGroup]="albumForm">
+    <fieldset class="album-field">
+        <input type="text" formControlName="artist">
+        <input type="text" formControlName="event">
+        <input type="text" formControlName="name">
+        <input type="text" formControlName="release">
+        <input type="text" formControlName="website">
+    </fieldset>
+</form>
+<div class="track-form-wrapper" *ngFor="let trackForm of trackForms">
+    <form [formGroup]="trackForm">
+        <fieldset class="track-field">
+            <input type="text" formControlName="title">
+            <input type="text" formControlName="artist">
+            <input type="text" formControlName="originalTitle">
+            <input type="text" formControlName="genre">
+            <input type="text" formControlName="release">
+            <input type="text" formControlName="arrangement">
+            <input type="text" formControlName="lyrics">
+            <input type="text" formControlName="vocal">
+        </fieldset>
+    </form>
+</div>
+
+<div *ngIf="albumForm.valid" id="div1" class="container" (drop)="drop($event)" (dragover)="allowDrop($event)">
+    <img id="drag1" src="http://www.w3schools.com/html/img_w3slogo.gif" draggable="true" (dragstart)="drag($event)" width="336"
+        height="69">
+</div>
