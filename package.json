@@ -6,7 +6,7 @@
   "scripts": {
     "babel-node": "babel-node --presets=latest",
     "build": "ng build src/angular",
-    "start": "rd /s /q dist & npm run angular & tsc & npm run copy-files & node ./dist/index.js",
+    "start": "sudo rm -r dist & npm run angular & tsc & npm run copy-files & node ./dist/index.js",
     "copy-files": "npm run copy-views & npm run copy-public",
     "copy-views": "copyfiles -f src/views/* dist/views",
     "copy-public": "copyfiles -f src/public/music/* dist/public/music & copyfiles -f src/public/styles/* dist/public/views",
@@ -34,7 +34,7 @@
     "express": "^4.16.3",
     "express-fileupload": "^0.4.0",
     "install": "^0.11.0",
-    "mongodb": "^3.0.10",
+    "mongodb": "^2.2.31",
     "mysql": "^2.15.0",
     "npm": "^6.1.0",
     "q": "^1.5.1",
