@@ -5,7 +5,8 @@ export type AlbumInDto = {
     release: Date,
     event: string,
     artist: string,
-    tracks: Array<AlbumTrackInDto>
+    tracks: Array<AlbumTrackInDto>,
+    thumbnail: string,
     website?: string
 }
 
@@ -15,6 +16,7 @@ export function mapToAlbumInDto(album: AlbumInDto): AlbumInDto {
         event: album.event,
         artist: album.artist,
         tracks: album.tracks.map(track => mapToTrackInDto(track)),
+        thumbnail: album.thumbnail,
         website: album.website
     };
 }

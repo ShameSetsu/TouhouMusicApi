@@ -16,7 +16,8 @@ export class MusicController extends BaseController {
         super();
         //this.trackCtrl = new TrackController(app, mongo);
         //this.albumCtrl = new AlbumController(app, mongo);
-        app.post('/api/album/files', this.postAlbumFiles());
+        app.post('/api/album/tracks', this.postAlbumFiles());
+        app.post('/api/album/thumbnail', this.postAlbumThumbnail());
         app.post('/api/album', this.postAlbum());
     }
 
@@ -25,10 +26,23 @@ export class MusicController extends BaseController {
             if (!req.files)
                 return res.status(HttpStatus.BAD_REQUEST).send('No files were uploaded.');
 
-            let thing: string = 'some.file.mp3';
             let fileIds: Array<string> = [];
 
-            this.copyFiles(Object.values(req.files))
+            this.copyFiles(Object.values(req.files), 'music')
+                .then(files => res.send(files))
+                .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err));
+        }
+    }
+
+    postAlbumThumbnail = ()=> {
+        return (req, res) => {
+            console.log('thumbnail payload', req.files);
+            if (!req.files)
+                return res.status(HttpStatus.BAD_REQUEST).send('No files were uploaded.');
+
+            let fileIds: Array<string> = [];
+
+            this.copyFiles(Object.values(req.files), 'thumbnail')
                 .then(files => res.send(files))
                 .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err));
         }
@@ -77,10 +91,10 @@ export class MusicController extends BaseController {
         }
     }
 
-    copyFiles(files): Promise<Array<string>> {
+    copyFiles(files, folder): Promise<Array<string>> {
         const promises: Array<Promise<string>> = files.map(file => new Promise((resolve, reject) => {
             let uid = uuidv1() + '.' + file.name.split('.').pop();
-            file.mv(Settings.rootDir + '/public/music/' + uid, (err) => {
+            file.mv(Settings.rootDir + '/public/' + folder + '/' + uid, (err) => {
                 if (err) reject(err);
                 resolve(uid);
             });

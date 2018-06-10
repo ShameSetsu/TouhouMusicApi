@@ -1,5 +1,60 @@
 :host {
-    p.variable {
-        color: violet;
+    fieldset {
+        display: flex;
+        flex-direction: column;
+        border-color: rgba(#000, 0.3);
+        box-shadow: 0 0 6px rgba(#000, 0.3);
+        margin-top: 5px;
+        label {
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            p {
+                margin: 0;
+                width: 150px;
+            }
+            input {
+                border-color: rgba(#000, 0.3);
+                box-shadow: 0 0 4px rgba(#000, 0.3);
+                height: 25px;
+                width: 100%;
+                border-radius: 0.5em;
+            }
+            input.ng-invalid {
+                background-color: rgba(red, 0.08)
+            }
+        }
+    }
+    form.album-form {
+        fieldset.album-field {
+            label {
+                p {}
+                input {}
+            }
+        }
+    }
+    div.track-form-wrapper {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        form {
+            display: flex;
+            width: 50%;
+            min-width: 400px;
+            max-width: 600px;
+            fieldset.track-field {
+                width: 100%;
+            }
+        }
+    }
+    label.upload-label {
+        img {
+            height: 75px;
+            width: auto;
+        }
+        img.status-icon{
+            margin-left: 15px;
+            height: 40px;
+        }
     }
 }

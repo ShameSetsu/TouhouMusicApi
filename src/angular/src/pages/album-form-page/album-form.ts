@@ -2,6 +2,11 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AlbumInDto, mapToAlbumInDto } from "../../models/albumInDto.model";
 import { AlbumTrackInDto, mapToTrackInDto } from "../../models/albumTrackInDto.model";
+import { MusicApiService } from "../../services/musicApiService";
+
+const allowedPictureFile = [
+    ''
+]
 
 @Component({
     templateUrl: './album-form.html',
@@ -12,9 +17,11 @@ export class AlbumFormPage {
 
     albumForm: FormGroup;
     trackForms: Array<FormGroup> = [];
-    files: Array<any>;
+    tracks: Array<any>;
+    allowedFile = ['audio/mp3'];
+    picture;
 
-    constructor() {
+    constructor(private musicApi: MusicApiService) {
         this.albumForm = new FormGroup({
             artist: new FormControl(null, Validators.required),
             event: new FormControl(null, Validators.required),
@@ -31,14 +38,22 @@ export class AlbumFormPage {
     }
 
     postAlbum() {
-        const album: AlbumInDto = mapToAlbumInDto({
+        const album = {
             artist: this.albumForm.controls.artist.value,
             event: this.albumForm.controls.event.value,
             name: this.albumForm.controls.name.value,
             release: this.albumForm.controls.release.value,
             tracks: this.trackForms.map(trackForm => trackForm.value),
-            website: this.albumForm.controls.website.value
-        });
+            website: this.albumForm.controls.website.value,
+        };
+        console.log('album', album);
+        this.musicApi.postAlbum(this.picture, this.tracks, album)
+            .then(res => {
+                console.log('POST SUCCESS', res);
+            })
+            .catch(err => {
+                console.log('POST ERROR', err);
+            })
     }
 
     dragFilesDropped(files) {
@@ -60,12 +75,24 @@ export class AlbumFormPage {
         console.log('dragev', ev);
     }
 
-    drop(ev) {
+    dropPicture(ev) {
         ev.preventDefault();
-        this.files = ev.dataTransfer.files;
-        console.log('this.files', this.files);
-        Object.values(this.files).forEach(file=>{
-            this.trackForms.push(new FormGroup({
+        console.log('pic', ev.dataTransfer.files[0].type);
+        if (Object.values(ev.dataTransfer.files).length == 1 && ev.dataTransfer.files[0].type.split('/')[0] == 'image') {
+            this.picture = ev.dataTransfer.files[0];
+        }
+    }
+
+    dropTracks(ev) {
+        ev.preventDefault();
+        console.log('this.files', this.tracks);
+        let tpmForms = [];
+        let forbidden = false;
+        Object.values(ev.dataTransfer.files).forEach((file: any) => {
+            if (file.type.split('/')[0] != 'audio') {
+                forbidden = true;
+            }
+            tpmForms.push(new FormGroup({
                 title: new FormControl(file.name.substr(0, file.name.lastIndexOf(".")), Validators.required),
                 artist: new FormControl(this.albumForm.controls.artist.value, Validators.required),
                 duration: new FormControl(0, Validators.required),
@@ -77,5 +104,10 @@ export class AlbumFormPage {
                 vocal: new FormControl(null)
             }))
         });
+        if (forbidden) return;
+        console.log('after return');
+        this.tracks = Object.values(ev.dataTransfer.files);
+        this.trackForms = tpmForms;
+
     }
 }

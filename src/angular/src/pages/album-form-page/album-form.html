@@ -1,28 +1,82 @@
 <form [formGroup]="albumForm">
     <fieldset class="album-field">
-        <input type="text" formControlName="artist">
-        <input type="text" formControlName="event">
-        <input type="text" formControlName="name">
-        <input type="text" formControlName="release">
-        <input type="text" formControlName="website">
+        <label>
+            <p class="label">サークル名</p>
+            <input type="text" formControlName="artist">
+        </label>
+        <label>
+            <p class="label">イベント</p>
+            <input type="text" formControlName="event">
+        </label>
+        <label>
+            <p class="label">タイトル</p>
+            <input type="text" formControlName="name">
+        </label>
+        <label>
+            <p class="label">発売日</p>
+            <input type="text" formControlName="release">
+        </label>
+        <label>
+            <p class="label">ホームページ</p>
+            <input type="text" formControlName="website">
+        </label>
     </fieldset>
 </form>
-<div class="track-form-wrapper" *ngFor="let trackForm of trackForms">
-    <form [formGroup]="trackForm">
+
+<fieldset>
+    <!-- <label *ngIf="albumForm.valid" class="upload-label" (drop)="drop($event)" (dragover)="allowDrop($event)"> -->
+    <label class="upload-label" (drop)="dropTracks($event)" (dragover)="allowDrop($event)">
+        <p class="label">音楽</p>
+        <img src="assets/img/upload-music.png" draggable="true" (dragstart)="drag($event)">
+        <img class="status-icon" *ngIf="tracks" src="assets/img/confirm.png">
+        <img class="status-icon" *ngIf="!tracks" src="assets/img/cross-icon.png">
+    </label>
+
+    <label class="upload-label" (drop)="dropPicture($event)" (dragover)="allowDrop($event)">
+        <p class="label">アルバムアート</p>
+        <img src="assets/img/upload-picture.png" draggable="true" (dragstart)="drag($event)">
+        <img class="status-icon" *ngIf="picture" src="assets/img/confirm.png">
+        <img class="status-icon" *ngIf="!picture" src="assets/img/cross-icon.png">
+    </label>
+</fieldset>
+
+<div class="track-form-wrapper">
+    <form [formGroup]="trackForm" *ngFor="let trackForm of trackForms">
         <fieldset class="track-field">
-            <input type="text" formControlName="title">
-            <input type="text" formControlName="artist">
-            <input type="text" formControlName="originalTitle">
-            <input type="text" formControlName="genre">
-            <input type="text" formControlName="release">
-            <input type="text" formControlName="arrangement">
-            <input type="text" formControlName="lyrics">
-            <input type="text" formControlName="vocal">
+            <label>
+                <p class="label">タイトル</p>
+                <input type="text" formControlName="title">
+            </label>
+            <label>
+                <p class="label">サークル名</p>
+                <input type="text" formControlName="artist">
+            </label>
+            <label>
+                <p class="label">原曲</p>
+                <input type="text" formControlName="originalTitle">
+            </label>
+            <label>
+                <p class="label">ジャンル</p>
+                <input type="text" formControlName="genre">
+            </label>
+            <label>
+                <p class="label">発売日</p>
+                <input type="text" formControlName="release">
+            </label>
+            <label>
+                <p class="label">アレンジ</p>
+                <input type="text" formControlName="arrangement">
+            </label>
+            <label>
+                <p class="label">作家名</p>
+                <input type="text" formControlName="lyrics">
+            </label>
+            <label>
+                <p class="label">ボーカル</p>
+                <input type="text" formControlName="vocal">
+            </label>
         </fieldset>
     </form>
 </div>
 
-<div *ngIf="albumForm.valid" id="div1" class="container" (drop)="drop($event)" (dragover)="allowDrop($event)">
-    <img id="drag1" src="http://www.w3schools.com/html/img_w3slogo.gif" draggable="true" (dragstart)="drag($event)" width="336"
-        height="69">
-</div>
+<button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
