@@ -7,18 +7,46 @@ import { TrackController } from './trackController';
 import { HttpStatus } from '../models/misc/httpStatus.enum';
 import { Settings } from '../settings';
 import * as uuidv1 from 'uuid/v1';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { ArtistController } from './artistController';
+import { EventController } from './eventController';
 
 export class MusicController extends BaseController {
     trackCtrl: TrackController;
     albumCtrl: AlbumController;
+    artistCtrl: ArtistController;
+    eventCtrl: EventController;
 
     constructor(app, mongo) {
         super();
-        //this.trackCtrl = new TrackController(app, mongo);
-        //this.albumCtrl = new AlbumController(app, mongo);
+        this.trackCtrl = new TrackController(app, mongo);
+        this.albumCtrl = new AlbumController(app, mongo);
+        this.artistCtrl = new ArtistController(app, mongo);
+        this.eventCtrl = new EventController(app, mongo);
         app.post('/api/album/tracks', this.postAlbumFiles());
         app.post('/api/album/thumbnail', this.postAlbumThumbnail());
         app.post('/api/album', this.postAlbum());
+        app.get('/api/album/test', this.getTestAlbum());
+    }
+
+    getTestAlbum = () => {
+        return (req, res) => {
+            this.albumCtrl.getAlbumById('0f717066-6dab-11e8-adc0-fa7ae01bbebc').then((album: any) => {
+                console.log('album', album);
+                forkJoin(
+                    this.trackCtrl.getTracksByAlbum('0f717066-6dab-11e8-adc0-fa7ae01bbebc'),
+                    this.artistCtrl.getArtistById(album.artist),
+                    this.eventCtrl.getEventById(album.event)
+                ).subscribe((response: any) => {
+                    console.log('forkResponse', response);
+                        album.tracks = response[0];
+                        album.artist = response[1].name;
+                        album.event = response[2].name;
+                        album.thumbnail = Settings.host + ':' + Settings.port + '/files/thumbnail/' + album.thumbnail + '.jpg';
+                        res.send(album);
+                    });
+            }).catch(err => { throw ('getAlbumById' + err) });
+        }
     }
 
     postAlbumFiles = () => {
@@ -34,7 +62,7 @@ export class MusicController extends BaseController {
         }
     }
 
-    postAlbumThumbnail = ()=> {
+    postAlbumThumbnail = () => {
         return (req, res) => {
             console.log('thumbnail payload', req.files);
             if (!req.files)

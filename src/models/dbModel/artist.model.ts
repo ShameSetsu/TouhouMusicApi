@@ -1,6 +1,6 @@
 export type Artist = {
+    _id?: string,
     name: string,
-    members: Array<string>,
     description: string,
     website?: string
 }

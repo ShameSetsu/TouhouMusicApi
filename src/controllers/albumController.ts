@@ -2,6 +2,7 @@ import * as express from 'express';
 
 import { AlbumInDto } from '../models/inDto/albumInDto.model';
 import { MongoServer } from '../Mongo';
+import { Album } from '../models/dbModel/album.model';
 
 export class AlbumController {
     collection;
@@ -23,6 +24,15 @@ export class AlbumController {
                 }
             });
         }
+    }
+
+    getAlbumById(_id: string): Promise<Album> {
+        return new Promise<Album>((resolve, reject)=>{
+            this.collection.findOne({"_id": _id}, (err, result)=>{
+                if(err) reject(err);
+                resolve(result);
+            });
+        });
     }
 
     insertOne(inDto: AlbumInDto): Promise<any> {

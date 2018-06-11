@@ -1,18 +1,15 @@
-import * as express from 'express';
-
-import { MongoServer } from '../Mongo';
 import { BaseController } from './baseController';
-import { Event } from '_debugger';
+import { Artist } from '../models/dbModel/artist.model';
 
-export class EventController extends BaseController {
+export class ArtistController extends BaseController {
     constructor(app, mongo) {
         super();
         this.dataAccess = mongo;
-        this.initCollection('event');
+        this.initCollection('artist');
     }
 
-    getEventById(_id: string): Promise<Event> {
-        return new Promise<Event>((resolve, reject)=> {
+    getArtistById(_id: string): Promise<Artist> {
+        return new Promise<Artist>((resolve, reject)=> {
             this.collection.findOne({"_id": _id}, (err, result) => {
                 if(err) reject(err);
                 else resolve(result);

@@ -8,10 +8,7 @@ require("babel-core").transform("code");
 
 const dataAccess = new MongoServer();
 dataAccess.openDb().then(() => {
-
     const musicController = new MusicController(app, dataAccess);
-    // const trackController = new TrackController(app, dataAccess);
-    // const albumController = new AlbumController(app, dataAccess);
 
     app.listen(Settings.port, err => {
         if (err) return console.error('app.listen', err);

@@ -13,6 +13,15 @@ export class TrackController extends BaseController {
         app.post('/test/track', this.postTrackTest());
     }
 
+    getTracksByAlbum(_id: string): Promise<Array<Track>> {
+        return new Promise<Array<Track>>((resolve, reject)=> {
+            this.collection.find({"album": _id}).toArray((err, result) => {
+                if(err) reject(err);
+                else resolve(result);
+            });
+        });
+    }
+
     getTrackTest = (): any => {
         return (req, res) => {
             this.collection.find({}).toArray((err, result) => {
@@ -30,9 +39,11 @@ export class TrackController extends BaseController {
         return (req, res) => {
             let track: Track = {
                 artist: 'ankimo',
+                album: 'some-id',
+                trackNumber: 1,
                 duration: 233,
                 genre: ['metal'],
-                release: new Date(Date.now()),
+                release: '2018-05-06',
                 title: 'perverseness',
                 file: '001.mp3'
             };
