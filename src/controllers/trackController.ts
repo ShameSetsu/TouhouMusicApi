@@ -45,9 +45,10 @@ export class TrackController extends BaseController {
                 genre: ['metal'],
                 release: '2018-05-06',
                 title: 'perverseness',
+                format: 'mp3',
                 file: '001.mp3'
             };
-            this.collection.insertOne(JSON.stringify(track), (err, result) => {
+            this.collection.insertOne(track, (err, result) => {
                 if (result) {
                     res.send(result);
                 }
@@ -58,9 +59,12 @@ export class TrackController extends BaseController {
         }
     }
 
-    insertMany(inDto: Array<Track>) {
+    insertMany(tracks: Array<Track>) {
         return new Promise((resolve, reject) => {
-
+            this.collection.insertMany(tracks, (err, res)=>{
+                if(err) reject(err);
+                else resolve(res);
+            })
         });
     }
 }

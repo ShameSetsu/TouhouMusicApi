@@ -10,7 +10,8 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: 'Scharlachrotの地平線',
-        originalTitle: '紅楼　～ Eastern Dream...'
+        originalTitle: '紅楼　～ Eastern Dream...',
+        format: 'mp3'
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
@@ -21,7 +22,8 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: 'Jealousy of Silence',
-        originalTitle: '緑眼のジェラシー'
+        originalTitle: '緑眼のジェラシー',
+        format: 'mp3'
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
@@ -32,7 +34,8 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: 'Endless Control',
-        originalTitle: 'ほおずきみたいに紅い魂'
+        originalTitle: 'ほおずきみたいに紅い魂',
+        format: 'mp3'
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
@@ -43,7 +46,8 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: 'Le Cirque de Sept Couleurs',
-        originalTitle: '不思議の国のアリス'
+        originalTitle: '不思議の国のアリス',
+        format: 'mp3'
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
@@ -54,7 +58,8 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: 'BPM210の上海アリス',
-        originalTitle: '明治十七年の上海アリス'
+        originalTitle: '明治十七年の上海アリス',
+        format: 'mp3'
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
@@ -65,7 +70,8 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: '魔境堕天録サリエル',
-        originalTitle: '魔境堕天録サリエル'
+        originalTitle: '魔境堕天録サリエル',
+        format: 'mp3'
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
@@ -76,7 +82,8 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: 'Perverseness',
-        originalTitle: '少女さとり　～ 3rd eye'
+        originalTitle: '少女さとり　～ 3rd eye',
+        format: 'mp3'
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
@@ -87,6 +94,7 @@ export const tracks: Array<Track> = [
         genre: ['087bdff4-6daa-11e8-adc0-fa7ae01bbebc'],
         release: '2018-05-06',
         title: '百鬼飛行',
-        originalTitle: '万年置き傘にご注意を'
+        originalTitle: '万年置き傘にご注意を',
+        format: 'mp3'
     }
 ]

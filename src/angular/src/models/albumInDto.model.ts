@@ -2,7 +2,7 @@ import { AlbumTrackInDto, mapToTrackInDto } from "./albumTrackInDto.model";
 
 export type AlbumInDto = {
     name: string,
-    release: Date,
+    release: string,
     event: string,
     artist: string,
     tracks: Array<AlbumTrackInDto>,

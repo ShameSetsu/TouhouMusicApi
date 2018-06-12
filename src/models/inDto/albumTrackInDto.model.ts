@@ -5,12 +5,14 @@ export type AlbumTrackInDto = {
     release: Date,
     genre: Array<string>,
     originalTitle?: string,
-    vocal?: string,
     arrangement?: string,
-    lyrics?: string
+    lyrics?: string,
+    file: string,
+    vocal?: string,
+    format: string
 }
 
-export function mapToTrackInDto(track: AlbumTrackInDto): AlbumTrackInDto {
+export function mapToTrackInDto(track: any): AlbumTrackInDto {
     return <AlbumTrackInDto> {
         title: track.title,
         artist: track.artist,
@@ -20,6 +22,8 @@ export function mapToTrackInDto(track: AlbumTrackInDto): AlbumTrackInDto {
         originalTitle: track.originalTitle,
         vocal: track.vocal,
         arrangement: track.arrangement,
-        lyrics: track.lyrics
+        lyrics: track.lyrics,
+        file: track.file,
+        format: track.format
     }
 }

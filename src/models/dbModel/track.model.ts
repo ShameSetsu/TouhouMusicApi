@@ -9,6 +9,7 @@ export type Track = {
     release: string,
     genre: Array<string>,
     file: string,
+    format: string,
     vocal?: string,
     arrangement?: string,
     lyrics?: string

@@ -79,13 +79,15 @@ export class MusicController extends BaseController {
     postAlbum = () => {
         return (req, res) => {
             res.send('received', req);
-            /*
+            
             const payload: AlbumInDto = mapToAlbumInDto(req.body);
 
+            const albumId = uuidv1();
             // CONVERT TO MONGO OBJECTS
             const tracks: Array<Track> = payload.tracks.map(track => {
                 return <Track>{
                     title: track.title,
+                    album: albumId,
                     artist: payload.artist,
                     duration: track.duration,
                     genre: track.genre,
@@ -94,13 +96,15 @@ export class MusicController extends BaseController {
                     arrangement: track.arrangement,
                     lyrics: track.lyrics,
                     originalTitle: track.originalTitle,
-                    vocal: track.vocal
+                    vocal: track.vocal,
+                    format: track.format
                 }
             });
             let albumDuration = 0;
             payload.tracks.forEach(track => albumDuration += track.duration);
 
             const album: Album = <Album>{
+                _id: albumId,
                 name: payload.name,
                 artist: payload.artist,
                 event: payload.event,
@@ -111,11 +115,18 @@ export class MusicController extends BaseController {
             }
             // const album = ;
             this.albumCtrl.insertOne(payload).then(AlbumInsertRes => {
+                console.log('insertOne res', AlbumInsertRes);
                 this.trackCtrl.insertMany(tracks).then(trackInsertRes => {
-
-                    res.send('success');
-                }, err => { throw ('trackCtrl.insertMany' + err) })
-            }, err => { throw ('albumCtrl.insertOne' + err) });*/
+                    console.log('insertmany res', trackInsertRes);
+                    res.send({album: AlbumInsertRes, tracks: trackInsertRes});
+                }).catch(err => { 
+                    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
+                    throw ('albumCtrl.insertOne' + err); 
+                });
+            }).catch(err => { 
+                res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
+                throw ('albumCtrl.insertOne' + err); 
+            });
         }
     }
 

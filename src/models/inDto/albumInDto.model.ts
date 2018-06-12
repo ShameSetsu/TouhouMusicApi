@@ -3,7 +3,7 @@ import { release } from "os";
 
 export type AlbumInDto = {
     name: string,
-    release: Date,
+    release: string,
     event: string,
     artist: string,
     tracks: Array<AlbumTrackInDto>,
