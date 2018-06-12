@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { AlbumFormPage } from '../pages/album-form-page/album-form';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './routes';
+import { MusicApiService } from '../services/musicApiService';
+import { Http, HttpModule } from '@angular/http';
 
 @NgModule({
     declarations: [
@@ -15,9 +17,12 @@ import { AppRoutes } from './routes';
     imports: [
         RouterModule.forRoot(AppRoutes),
         BrowserModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpModule
     ],
-    providers: [],
+    providers: [
+        MusicApiService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

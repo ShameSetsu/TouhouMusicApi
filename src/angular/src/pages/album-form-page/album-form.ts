@@ -22,6 +22,7 @@ export class AlbumFormPage {
     picture;
 
     constructor(private musicApi: MusicApiService) {
+        console.log('album-form');
         this.albumForm = new FormGroup({
             artist: new FormControl(null, Validators.required),
             event: new FormControl(null, Validators.required),
@@ -98,7 +99,7 @@ export class AlbumFormPage {
                 duration: new FormControl(0, Validators.required),
                 genre: new FormControl(null, Validators.required),
                 release: new FormControl(this.albumForm.controls.release.value, Validators.required),
-                arrangement: new FormControl(this.albumForm.controls.release.value),
+                arrangement: new FormControl(null),
                 lyrics: new FormControl(null),
                 originalTitle: new FormControl(null),
                 vocal: new FormControl(null)
