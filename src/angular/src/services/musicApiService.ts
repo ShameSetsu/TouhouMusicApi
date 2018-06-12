@@ -28,8 +28,8 @@ export class MusicApiService {
         
         return new Promise<Response>((resolve, reject)=>{
             forkJoin(
-                this.http.post('http://localhost:3000/api/album/thumbnail', picturePayload, null),
-                this.http.post('http://localhost:3000/api/album/tracks', tracksPayload, null)
+                this.http.post('http://localhost:3000/api/album/thumbnail', picturePayload),
+                this.http.post('http://localhost:3000/api/album/tracks', tracksPayload)
             ).subscribe(res=>{
                 console.log('forkJoin res', res);
                 console.log('postAlbum');
@@ -42,5 +42,14 @@ export class MusicApiService {
                 })
             });
         });
+    }
+
+    getAllArtists(): Promise<Array<{_id: string, name: string}>> {
+        return new Promise<Array<{_id: string, name: string}>>((resolve, reject)=>{
+            this.http.get('http://localhost:3000/api/artist/all').subscribe((res: any)=>{
+                console.log('getAllArtist RES', JSON.parse(res._body));
+                resolve(JSON.parse(res._body));
+            }, err=>reject(err));
+        })
     }
 }

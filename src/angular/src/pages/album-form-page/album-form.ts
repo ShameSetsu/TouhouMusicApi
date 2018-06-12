@@ -26,16 +26,7 @@ export class AlbumFormPage {
     tracks: Array<any>;
     allowedFile = ['audio/mp3'];
     picture;
-    artists: Array<{ _id: string, name: string }> = [
-        {
-            _id: 'xxxxdddxxx',
-            name: 'ankimo'
-        },
-        {
-            _id: 'xxxxcccxxx',
-            name: '5150'
-        }
-    ];
+    artists: Array<{ _id: string, name: string }> = [];
     filteredArtists: Observable<Array<{ _id: string, name: string }>>;
 
     constructor(private musicApi: MusicApiService) {
@@ -46,6 +37,9 @@ export class AlbumFormPage {
             release: new FormControl(null, Validators.required),
             website: new FormControl(null),
         });
+        this.musicApi.getAllArtists()
+            .then(res => this.artists = res)
+            .catch(err => console.error('getAllArtists Error', err));
     }
 
     ngOnInit() {
@@ -63,9 +57,12 @@ export class AlbumFormPage {
     }
 
     filter(val: string): Array<{ _id: string, name: string }> {
-        return this.artists.filter(artist => artist.name.toLowerCase().includes(val.toLowerCase()));
+        return (typeof val == 'string') ? this.artists.filter(artist => artist.name.toLowerCase().includes(val.toLowerCase())) : null;
     }
 
+    displayName(object: any) {
+        return object ? object.name : null;
+    }
 
     postAlbum() {
         const album = {

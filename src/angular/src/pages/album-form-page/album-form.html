@@ -3,8 +3,8 @@
 
         <mat-form-field class="example-full-width">
             <input type="text" placeholder="サークル名" aria-label="Number" matInput formControlName="artist" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let artist of filteredArtists | async" [value]="artist._id">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
+                <mat-option *ngFor="let artist of filteredArtists | async" [value]="artist">
                     {{ artist.name }}
                 </mat-option>
             </mat-autocomplete>
