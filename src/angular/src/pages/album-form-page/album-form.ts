@@ -8,11 +8,12 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { map, startWith } from 'rxjs/operators';
 
 import { MusicApiService } from '../../services/musicApiService';
+
 
 @Component({
     templateUrl: './album-form.html',
@@ -31,7 +32,7 @@ export class AlbumFormPage {
 
     constructor(private musicApi: MusicApiService) {
         this.albumForm = new FormGroup({
-            artist: new FormControl(null, Validators.required),
+            artist: new FormControl(null, [Validators.required]),
             event: new FormControl(null, Validators.required),
             name: new FormControl(null, Validators.required),
             release: new FormControl(null, Validators.required),
@@ -46,8 +47,11 @@ export class AlbumFormPage {
         console.log('ngOnInit');
         this.albumForm.controls.artist.valueChanges
             .subscribe(val => {
-                console.log('val', val);
-                console.log('this.filter(val)', this.filter(val));
+                if (!val._id || !val.name || typeof !val._id == 'string' || typeof !val.name == 'string' || !(val._id.length > 0) || typeof !val.name == 'string' || !(val.name.length > 0)) {
+                    this.albumForm.controls.artist.setErrors(<ValidationErrors>{
+                        error: 'invalidObject'
+                    });
+                }
             });
         this.filteredArtists = this.albumForm.controls.artist.valueChanges
             .pipe(
@@ -66,7 +70,7 @@ export class AlbumFormPage {
 
     postAlbum() {
         const album = {
-            artist: this.albumForm.controls.artist.value,
+            artist: this.albumForm.controls.artist.value._id,
             event: this.albumForm.controls.event.value,
             name: this.albumForm.controls.name.value,
             release: this.albumForm.controls.release.value,
