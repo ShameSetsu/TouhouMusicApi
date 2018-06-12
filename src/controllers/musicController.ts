@@ -78,8 +78,7 @@ export class MusicController extends BaseController {
 
     postAlbum = () => {
         return (req, res) => {
-            res.send('received', req);
-            
+            console.log('postAlbum');
             const payload: AlbumInDto = mapToAlbumInDto(req.body);
 
             const albumId = uuidv1();
@@ -103,7 +102,7 @@ export class MusicController extends BaseController {
             let albumDuration = 0;
             payload.tracks.forEach(track => albumDuration += track.duration);
 
-            const album: Album = <Album>{
+            const album: Album = <Album> {
                 _id: albumId,
                 name: payload.name,
                 artist: payload.artist,
@@ -112,19 +111,22 @@ export class MusicController extends BaseController {
                 nbTracks: payload.tracks.length,
                 release: payload.release,
                 website: payload.website
-            }
-            // const album = ;
-            this.albumCtrl.insertOne(payload).then(AlbumInsertRes => {
+            };
+            
+            console.log('insert');
+            this.albumCtrl.insertOne(album).then(AlbumInsertRes => {
                 console.log('insertOne res', AlbumInsertRes);
                 this.trackCtrl.insertMany(tracks).then(trackInsertRes => {
                     console.log('insertmany res', trackInsertRes);
                     res.send({album: AlbumInsertRes, tracks: trackInsertRes});
                 }).catch(err => { 
                     res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
+                    console.error('insertMany ERROR', err);
                     throw ('albumCtrl.insertOne' + err); 
                 });
             }).catch(err => { 
                 res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
+                console.error('insert ERROR', err);
                 throw ('albumCtrl.insertOne' + err); 
             });
         }

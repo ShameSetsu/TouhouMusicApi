@@ -35,9 +35,10 @@ export class AlbumController {
         });
     }
 
-    insertOne(inDto: AlbumInDto): Promise<any> {
+    insertOne(album: Album): Promise<any> {
+        console.log('insert album', album);
         return new Promise((resolve, reject) => {
-            this.collection.insertOne(JSON.stringify(inDto), (err, result) => {
+            this.collection.insertOne(album , (err, result) => {
                 if (result) {
                     resolve(result);
                 }

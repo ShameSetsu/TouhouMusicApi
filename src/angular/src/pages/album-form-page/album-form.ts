@@ -1,12 +1,18 @@
-import { Component } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AlbumInDto, mapToAlbumInDto } from "../../models/albumInDto.model";
-import { AlbumTrackInDto, mapToTrackInDto } from "../../models/albumTrackInDto.model";
-import { MusicApiService } from "../../services/musicApiService";
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/switchMap';
 
-const allowedPictureFile = [
-    ''
-]
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { map, startWith } from 'rxjs/operators';
+
+import { MusicApiService } from '../../services/musicApiService';
 
 @Component({
     templateUrl: './album-form.html',
@@ -20,9 +26,19 @@ export class AlbumFormPage {
     tracks: Array<any>;
     allowedFile = ['audio/mp3'];
     picture;
+    artists: Array<{ _id: string, name: string }> = [
+        {
+            _id: 'xxxxdddxxx',
+            name: 'ankimo'
+        },
+        {
+            _id: 'xxxxcccxxx',
+            name: '5150'
+        }
+    ];
+    filteredArtists: Observable<Array<{ _id: string, name: string }>>;
 
     constructor(private musicApi: MusicApiService) {
-        console.log('album-form');
         this.albumForm = new FormGroup({
             artist: new FormControl(null, Validators.required),
             event: new FormControl(null, Validators.required),
@@ -33,10 +49,23 @@ export class AlbumFormPage {
     }
 
     ngOnInit() {
-        this.albumForm.valueChanges.subscribe(value => {
-            console.log('albumForm value', value);
-        });
+        console.log('ngOnInit');
+        this.albumForm.controls.artist.valueChanges
+            .subscribe(val => {
+                console.log('val', val);
+                console.log('this.filter(val)', this.filter(val));
+            });
+        this.filteredArtists = this.albumForm.controls.artist.valueChanges
+            .pipe(
+                startWith(''),
+                map(val => this.filter(val))
+            );
     }
+
+    filter(val: string): Array<{ _id: string, name: string }> {
+        return this.artists.filter(artist => artist.name.toLowerCase().includes(val.toLowerCase()));
+    }
+
 
     postAlbum() {
         const album = {
@@ -103,12 +132,11 @@ export class AlbumFormPage {
                 lyrics: new FormControl(null),
                 originalTitle: new FormControl(null),
                 vocal: new FormControl(null)
-            }))
+            }));
         });
         if (forbidden) return;
         console.log('after return');
         this.tracks = Object.values(ev.dataTransfer.files);
         this.trackForms = tpmForms;
-
     }
 }

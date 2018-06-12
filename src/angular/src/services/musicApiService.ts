@@ -19,7 +19,7 @@ export class MusicApiService {
         });
 
         let headers = new Headers();
-        headers.append('Content-Type', 'multipart/form-data');
+        headers.append('Content-Type', 'application/json');
         let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
         options.headers = headers;
 
@@ -32,6 +32,14 @@ export class MusicApiService {
                 this.http.post('http://localhost:3000/api/album/tracks', tracksPayload, null)
             ).subscribe(res=>{
                 console.log('forkJoin res', res);
+                console.log('postAlbum');
+                this.http.post('http://localhost:3000/api/album', album, options).subscribe(res=>{
+                    console.log('postAlbumRes', res);
+                    resolve(res);
+                }, err=>{
+                    console.error('postAlbumErr', res);
+                    resolve(err);
+                })
             });
         });
     }

@@ -1,6 +1,7 @@
 import * as cors from 'cors';
 import * as express from 'express';
 import * as fileUpload from 'express-fileupload';
+import * as bodyParser from 'body-parser';
 
 import { Settings } from './settings';
 import { ApiRoutes } from './routes/routes.main';
@@ -15,6 +16,7 @@ class App {
         this.express.use(cors());
         this.express.set('views', Settings.rootDir + '/views');
         this.express.set('view engine', 'ejs');
+        this.express.use(bodyParser.json());
         this.express.use(fileUpload({ fileSize: 314572800 })); // limit = 300 Mo
         this.express.use('/files', express.static(Settings.rootDir + '/public'));
         this.express.use(express.static(Settings.rootDir + '/public/angular'));

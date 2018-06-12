@@ -1,82 +1,110 @@
 <form [formGroup]="albumForm">
-    <fieldset class="album-field">
-        <label>
-            <p class="label">サークル名</p>
-            <input type="text" formControlName="artist">
-        </label>
-        <label>
-            <p class="label">イベント</p>
-            <input type="text" formControlName="event">
-        </label>
-        <label>
-            <p class="label">タイトル</p>
-            <input type="text" formControlName="name">
-        </label>
-        <label>
-            <p class="label">発売日</p>
-            <input type="text" formControlName="release">
-        </label>
-        <label>
-            <p class="label">ホームページ</p>
-            <input type="text" formControlName="website">
-        </label>
-    </fieldset>
+    <mat-card class="album-field">
+
+        <mat-form-field class="example-full-width">
+            <input type="text" placeholder="サークル名" aria-label="Number" matInput formControlName="artist" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let artist of filteredArtists | async" [value]="artist._id">
+                    {{ artist.name }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>必須！</mat-hint>
+            <mat-error>無効入力</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <input type="text" placeholder="イベント" aria-label="Number" matInput formControlName="event">
+            <mat-hint>必須！</mat-hint>
+            <mat-error>無効入力</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <input type="text" placeholder="タイトル" aria-label="Number" matInput formControlName="name">
+            <mat-hint>必須！</mat-hint>
+            <mat-error>無効入力</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <input type="text" placeholder="発売日" aria-label="Number" matInput formControlName="release">
+            <mat-hint>必須！</mat-hint>
+            <mat-error>無効入力</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <input type="text" placeholder="ホームページ" aria-label="Number" matInput formControlName="website">
+        </mat-form-field>
+
+    </mat-card>
 </form>
 
-<fieldset>
-    <!-- <label *ngIf="albumForm.valid" class="upload-label" (drop)="drop($event)" (dragover)="allowDrop($event)"> -->
-    <label class="upload-label" (drop)="dropTracks($event)" (dragover)="allowDrop($event)">
-        <p class="label">音楽</p>
-        <img src="assets/img/upload-music.png" draggable="true" (dragstart)="drag($event)">
-        <img class="status-icon" *ngIf="tracks" src="assets/img/confirm.png">
-        <img class="status-icon" *ngIf="!tracks" src="assets/img/cross-icon.png">
-    </label>
+<div class="upload-fields">
+    <mat-card class="upload-label" (drop)="dropTracks($event)" (dragover)="allowDrop($event)">
+        <label class="label">音楽</label>
+        <div class="img-label">
+            <img src="assets/img/upload-music.png" draggable="true" (dragstart)="drag($event)">
+            <img class="status-icon" *ngIf="tracks" src="assets/img/confirm.png">
+            <img class="status-icon" *ngIf="!tracks" src="assets/img/cross-icon.png">
+        </div>
+    </mat-card>
 
-    <label class="upload-label" (drop)="dropPicture($event)" (dragover)="allowDrop($event)">
-        <p class="label">アルバムアート</p>
-        <img src="assets/img/upload-picture.png" draggable="true" (dragstart)="drag($event)">
-        <img class="status-icon" *ngIf="picture" src="assets/img/confirm.png">
-        <img class="status-icon" *ngIf="!picture" src="assets/img/cross-icon.png">
-    </label>
-</fieldset>
+    <mat-card class="upload-label" (drop)="dropPicture($event)" (dragover)="allowDrop($event)">
+        <label class="label">アルバムアート</label>
+        <div class="img-label">
+            <img src="assets/img/upload-picture.png" draggable="true" (dragstart)="drag($event)">
+            <img class="status-icon" *ngIf="picture" src="assets/img/confirm.png">
+            <img class="status-icon" *ngIf="!picture" src="assets/img/cross-icon.png">
+        </div>
+    </mat-card>
+</div>
 
 <div class="track-form-wrapper">
     <form [formGroup]="trackForm" *ngFor="let trackForm of trackForms">
-        <fieldset class="track-field">
-            <label>
-                <p class="label">タイトル</p>
-                <input type="text" formControlName="title">
-            </label>
-            <label>
-                <p class="label">サークル名</p>
-                <input type="text" formControlName="artist">
-            </label>
-            <label>
-                <p class="label">原曲</p>
-                <input type="text" formControlName="originalTitle">
-            </label>
-            <label>
-                <p class="label">ジャンル</p>
-                <input type="text" formControlName="genre">
-            </label>
-            <label>
-                <p class="label">発売日</p>
-                <input type="text" formControlName="release">
-            </label>
-            <label>
-                <p class="label">アレンジ</p>
-                <input type="text" formControlName="arrangement">
-            </label>
-            <label>
-                <p class="label">作家名</p>
-                <input type="text" formControlName="lyrics">
-            </label>
-            <label>
-                <p class="label">ボーカル</p>
-                <input type="text" formControlName="vocal">
-            </label>
-        </fieldset>
+        <mat-card class="track-field">
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="タイトル" aria-label="title" matInput formControlName="title">
+                <mat-hint>必須！</mat-hint>
+                <mat-error>無効入力</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="サークル名" aria-label="Number" matInput formControlName="artist">
+                <mat-hint>必須！</mat-hint>
+                <mat-error>無効入力</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="原曲" aria-label="Number" matInput formControlName="originalTitle">
+                <mat-hint>必須！</mat-hint>
+                <mat-error>無効入力</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="ジャンル" aria-label="Number" matInput formControlName="genre">
+                <mat-hint>必須！</mat-hint>
+                <mat-error>無効入力</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="発売日" aria-label="Number" matInput formControlName="release">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="アレンジ" aria-label="Number" matInput formControlName="arrangement">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="作家名" aria-label="Number" matInput formControlName="lyrics">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <input type="text" placeholder="ボーカル" aria-label="Number" matInput formControlName="vocal">
+            </mat-form-field>
+
+        </mat-card>
     </form>
 </div>
 
-<button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
+<div class="button-wrapper">
+    <button mat-button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
+</div>

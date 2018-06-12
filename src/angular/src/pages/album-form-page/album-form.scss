@@ -1,36 +1,10 @@
 :host {
-    fieldset {
+    mat-card {
         display: flex;
         flex-direction: column;
-        border-color: rgba(#000, 0.3);
-        box-shadow: 0 0 6px rgba(#000, 0.3);
-        margin-top: 5px;
-        label {
-            display: flex;
-            padding: 10px;
-            align-items: center;
-            p {
-                margin: 0;
-                width: 150px;
-            }
-            input {
-                border-color: rgba(#000, 0.3);
-                box-shadow: 0 0 4px rgba(#000, 0.3);
-                height: 25px;
-                width: 100%;
-                border-radius: 0.5em;
-            }
-            input.ng-invalid {
-                background-color: rgba(red, 0.08)
-            }
-        }
-    }
-    form.album-form {
-        fieldset.album-field {
-            label {
-                p {}
-                input {}
-            }
+        margin: 10px;
+        input.ng-invalid {
+            box-shadow: 0 0 15px rgba(red, 0.2) inset;
         }
     }
     div.track-form-wrapper {
@@ -42,19 +16,38 @@
             width: 50%;
             min-width: 400px;
             max-width: 600px;
-            fieldset.track-field {
+            mat-card.track-field {
                 width: 100%;
             }
         }
     }
-    label.upload-label {
-        img {
-            height: 75px;
-            width: auto;
+    .upload-fields {
+        display: flex;
+        .upload-label {
+            width: calc(50vw - 20px);
+            .img-label {
+                display: flex;
+                align-items: center;
+                padding-top: 10px;
+                img {
+                    height: 75px;
+                    width: auto;
+                }
+                img.status-icon {
+                    margin-left: 15px;
+                    height: 40px;
+                }
+            }
         }
-        img.status-icon{
-            margin-left: 15px;
-            height: 40px;
+    }
+    .button-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        .submit-album {
+            min-width: 150px;
+            min-height: 45px;
+            background-color: palegreen;
         }
     }
 }
