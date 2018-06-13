@@ -58,6 +58,34 @@ export class MusicApiService {
         });
     }
 
+    postGenre(genre) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
+        options.headers = headers;
+        console.log('genre', genre);
+        return new Promise<Response>((resolve, reject) => {
+            this.http.post('http://localhost:3000/api/genre', genre).subscribe(
+                res => resolve(res),
+                err => reject(err)
+            );
+        });
+    }
+
+    postEvent(event) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
+        options.headers = headers;
+        console.log('event', event);
+        return new Promise<Response>((resolve, reject) => {
+            this.http.post('http://localhost:3000/api/event', event).subscribe(
+                res => resolve(res),
+                err => reject(err)
+            );
+        });
+    }
+
     getAllArtists(): Promise<Array<{ _id: string, name: string }>> {
         return new Promise<Array<{ _id: string, name: string }>>((resolve, reject) => {
             this.http.get('http://localhost:3000/api/artist/all').subscribe((res: any) => {

@@ -11,12 +11,16 @@ import { MusicApiService } from '../services/musicApiService';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './routes';
 import { ArtistFormComponent } from '../components/artist-form-component/artist-form-component';
+import { EventFormComponent } from '../components/event-form-component/event-form-component';
+import { GenreFormComponent } from '../components/genre-form-component/genre-form-component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AlbumFormPage,
-        ArtistFormComponent
+        ArtistFormComponent,
+        EventFormComponent,
+        GenreFormComponent
     ],
     imports: [
         RouterModule.forRoot(AppRoutes),
@@ -38,7 +42,9 @@ import { ArtistFormComponent } from '../components/artist-form-component/artist-
         MusicApiService
     ],
     entryComponents: [
-        ArtistFormComponent
+        ArtistFormComponent,
+        EventFormComponent,
+        GenreFormComponent
     ],
     bootstrap: [AppComponent]
 })

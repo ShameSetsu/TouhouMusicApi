@@ -1,0 +1,12 @@
+<form class="dialog-form">
+    <mat-form-field class="example-full-width">
+        <input type="text" placeholder="イベント" aria-label="Number" matInput [formControl]="eventForm">
+        <mat-hint>必須！</mat-hint>
+        <mat-error>無効入力</mat-error>
+    </mat-form-field>
+
+    <div class="button-wrapper">
+        <button mat-button (click)="close()">閉じる</button>
+        <button mat-button (click)="post()">確かめる</button>
+    </div>
+</form>

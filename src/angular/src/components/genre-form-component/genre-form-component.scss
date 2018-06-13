@@ -1,0 +1,15 @@
+:host {
+    .dialog-form {
+        display: flex;
+        flex-direction: column;
+        min-width: 500px;
+        textarea {
+            min-height: 55px;
+        }
+        .button-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}

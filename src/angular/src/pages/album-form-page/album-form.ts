@@ -9,13 +9,15 @@ import 'rxjs/add/operator/switchMap';
 
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { map, startWith } from 'rxjs/operators';
 
-import { MusicApiService } from '../../services/musicApiService';
-import { forkJoin } from 'rxjs/observable/forkJoin';
 import { ArtistFormComponent } from '../../components/artist-form-component/artist-form-component';
-import { MatDialog } from '@angular/material';
+import { EventFormComponent } from '../../components/event-form-component/event-form-component';
+import { GenreFormComponent } from '../../components/genre-form-component/genre-form-component';
+import { MusicApiService } from '../../services/musicApiService';
 
 
 @Component({
@@ -34,11 +36,10 @@ export class AlbumFormPage {
     artists: Array<{ _id: string, name: string }> = [];
     filteredArtists: Observable<Array<{ _id: string, name: string }>>;
 
-    genres: Array<{ _id: string, name: string }> = [];
-    filteredGenres: Observable<Array<{ _id: string, name: string }>>;
-
     events: Array<{ _id: string, name: string }> = [];
     filteredEvents: Observable<Array<{ _id: string, name: string }>>;
+
+    genres: Array<{ _id: string, name: string }> = [];
 
     constructor(private musicApi: MusicApiService,
         public dialog: MatDialog) {
@@ -168,22 +169,6 @@ export class AlbumFormPage {
                 vocal: new FormControl(null)
             });
             tpmForms.push(tmpForm);
-
-            // this.filteredGenres = tmpForm.controls.genre.valueChanges
-            //     .pipe(
-            //         startWith(''),
-            //         map(val => this.filterGenres(val))
-            //     );
-            // console.log('valueChageSub');
-            // tmpForm.controls.genre.valueChanges
-            //     .subscribe(val => {
-            //         console.log('subGenre', tmpForm);
-            //         if (!val._id || !val.name || typeof !val._id == 'string' || typeof !val.name == 'string' || !(val._id.length > 0) || typeof !val.name == 'string' || !(val.name.length > 0)) {
-            //             tmpForm.controls.genre.setErrors(<ValidationErrors>{
-            //                 error: 'invalidObject'
-            //             });
-            //         }
-            //     });
         });
         if (forbidden) return;
         console.log('after return');
@@ -202,13 +187,30 @@ export class AlbumFormPage {
         });
     }
 
-    filterArtists(val: string): Array<{ _id: string, name: string }> {
-        return (typeof val == 'string') ? this.artists.filter(artist => artist.name.toLowerCase().includes(val.toLowerCase())) : null;
+    showEventForm() {
+        let dialogRef = this.dialog.open(EventFormComponent);
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this.musicApi.getAllEvents()
+                    .then(res => this.events = res)
+                    .catch(err => console.error('getAllEvents error', err));
+            }
+        });
     }
 
-    filterGenres(val: string): Array<{ _id: string, name: string }> {
-        console.log()
-        return (typeof val == 'string') ? this.genres.filter(genre => genre.name.toLowerCase().includes(val.toLowerCase())) : null;
+    showGenreForm() {
+        let dialogRef = this.dialog.open(GenreFormComponent);
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this.musicApi.getAllGenres()
+                    .then(res => this.genres = res)
+                    .catch(err => console.error('getAllGenres error', err));
+            }
+        });
+    }
+
+    filterArtists(val: string): Array<{ _id: string, name: string }> {
+        return (typeof val == 'string') ? this.artists.filter(artist => artist.name.toLowerCase().includes(val.toLowerCase())) : null;
     }
 
     filterEvents(val: string): Array<{ _id: string, name: string }> {

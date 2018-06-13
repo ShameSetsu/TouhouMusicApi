@@ -11,6 +11,7 @@ export class EventController extends BaseController {
         this.dataAccess = mongo;
         this.initCollection('event');
         app.get('/api/event/all', this.getAllEvent());
+        app.post('/api/event', this.postOneEvent());
     }
 
     getAllEvent = () => {
@@ -22,6 +23,19 @@ export class EventController extends BaseController {
                 else {
                     res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
                     throw (err);
+                }
+            });
+        }
+    }
+
+    postOneEvent = () => {
+        return (req, res) => {
+            this.collection.insertOne(req.body, (err, result) => {
+                if (result) {
+                    res.send(result);
+                }
+                else {
+                    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
                 }
             });
         }

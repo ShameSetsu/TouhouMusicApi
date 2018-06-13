@@ -8,6 +8,7 @@ export class GenreController extends BaseController {
         this.dataAccess = mongo;
         this.initCollection('genre');
         app.get('/api/genre/all', this.getAllGenres());
+        app.post('/api/genre', this.postOneGenre());
     }
 
     getAllGenres = () => {
@@ -19,6 +20,19 @@ export class GenreController extends BaseController {
                 else {
                     res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
                     throw (err);
+                }
+            });
+        }
+    }
+
+    postOneGenre = () => {
+        return (req, res) => {
+            this.collection.insertOne(req.body, (err, result) => {
+                if (result) {
+                    res.send(result);
+                }
+                else {
+                    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
                 }
             });
         }

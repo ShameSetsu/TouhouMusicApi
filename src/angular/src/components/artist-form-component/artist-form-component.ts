@@ -36,5 +36,6 @@ export class ArtistFormComponent {
             .then(res => {
                 this.dialogRef.close(true);
             })
+            .catch(err=>console.error('postArtist error', err));
     }
 }
