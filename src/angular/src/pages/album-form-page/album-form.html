@@ -1,36 +1,50 @@
 <form [formGroup]="albumForm">
     <mat-card class="album-field">
+        <div style="display: flex;width: 100%;">
+            <mat-form-field class="has-button">
+                <input type="text" placeholder="サークル名" aria-label="Number" matInput formControlName="artist" [matAutocomplete]="artist">
+                <mat-autocomplete #artist="matAutocomplete" [displayWith]="displayName">
+                    <mat-option *ngFor="let artist of filteredArtists | async" [value]="artist">
+                        {{ artist.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-hint>必須！</mat-hint>
+                <mat-error>無効入力</mat-error>
+            </mat-form-field>
+            <button (click)="showArtistForm()" class="icon-button" mat-button>
+                <i class="material-icons">add_circle</i>
+            </button>
+        </div>
 
-        <mat-form-field class="example-full-width">
-            <input type="text" placeholder="サークル名" aria-label="Number" matInput formControlName="artist" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
-                <mat-option *ngFor="let artist of filteredArtists | async" [value]="artist">
-                    {{ artist.name }}
-                </mat-option>
-            </mat-autocomplete>
-            <mat-hint>必須！</mat-hint>
-            <mat-error>無効入力</mat-error>
-        </mat-form-field>
+        <div style="display: flex;width: 100%;">
+            <mat-form-field class="has-button">
+                <input type="text" placeholder="イベント" aria-label="Number" matInput formControlName="event" [matAutocomplete]="event">
+                <mat-autocomplete #event="matAutocomplete" [displayWith]="displayName">
+                    <mat-option *ngFor="let event of filteredEvents | async" [value]="event">
+                        {{ event.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-hint>必須！</mat-hint>
+                <mat-error>無効入力</mat-error>
+            </mat-form-field>
+            <button class="icon-button" mat-button>
+                <i class="material-icons">add_circle</i>
+            </button>
+        </div>
 
-        <mat-form-field class="example-full-width">
-            <input type="text" placeholder="イベント" aria-label="Number" matInput formControlName="event">
-            <mat-hint>必須！</mat-hint>
-            <mat-error>無効入力</mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <input type="text" placeholder="タイトル" aria-label="Number" matInput formControlName="name">
             <mat-hint>必須！</mat-hint>
             <mat-error>無効入力</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <input type="text" placeholder="発売日" aria-label="Number" matInput formControlName="release">
             <mat-hint>必須！</mat-hint>
             <mat-error>無効入力</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <input type="text" placeholder="ホームページ" aria-label="Number" matInput formControlName="website">
         </mat-form-field>
 
@@ -58,46 +72,54 @@
 </div>
 
 <div class="track-form-wrapper">
-    <form [formGroup]="trackForm" *ngFor="let trackForm of trackForms">
+    <form [formGroup]="trackForm" *ngFor="let trackForm of trackForms; let i = index">
         <mat-card class="track-field">
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field>
                 <input type="text" placeholder="タイトル" aria-label="title" matInput formControlName="title">
                 <mat-hint>必須！</mat-hint>
                 <mat-error>無効入力</mat-error>
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field>
                 <input type="text" placeholder="サークル名" aria-label="Number" matInput formControlName="artist">
                 <mat-hint>必須！</mat-hint>
                 <mat-error>無効入力</mat-error>
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field>
                 <input type="text" placeholder="原曲" aria-label="Number" matInput formControlName="originalTitle">
                 <mat-hint>必須！</mat-hint>
                 <mat-error>無効入力</mat-error>
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
-                <input type="text" placeholder="ジャンル" aria-label="Number" matInput formControlName="genre">
+            <mat-form-field>
+                <mat-select class="has-button" placeholder="ジャンル" formControlName="genre" multiple>
+                    <mat-option>--</mat-option>
+                    <mat-option *ngFor="let genre of genres" [value]="genre">
+                        {{ genre.name }}
+                    </mat-option>
+                </mat-select>
+                <button class="icon-button" mat-button>
+                    <i class="material-icons">add_circle</i>
+                </button>
                 <mat-hint>必須！</mat-hint>
                 <mat-error>無効入力</mat-error>
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field>
                 <input type="text" placeholder="発売日" aria-label="Number" matInput formControlName="release">
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field>
                 <input type="text" placeholder="アレンジ" aria-label="Number" matInput formControlName="arrangement">
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field>
                 <input type="text" placeholder="作家名" aria-label="Number" matInput formControlName="lyrics">
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field>
                 <input type="text" placeholder="ボーカル" aria-label="Number" matInput formControlName="vocal">
             </mat-form-field>
 

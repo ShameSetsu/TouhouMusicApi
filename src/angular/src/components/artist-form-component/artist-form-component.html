@@ -1,0 +1,21 @@
+<form class="dialog-form" [formGroup]="artistForm">
+    <mat-form-field class="example-full-width">
+        <input type="text" placeholder="サークル名" aria-label="Number" matInput formControlName="name">
+        <mat-hint>必須！</mat-hint>
+        <mat-error>無効入力</mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <textarea type="text" placeholder="説明" aria-label="Number" matInput formControlName="description"></textarea>
+        <mat-hint>必須！</mat-hint>
+        <mat-error>無効入力</mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input type="url" placeholder="ホームページ" aria-label="Number" matInput formControlName="website">
+        <mat-error>無効入力</mat-error>
+    </mat-form-field>
+
+    <div class="button-wrapper">
+        <button mat-button (click)="close()">閉じる</button>
+        <button mat-button (click)="post()">確かめる</button>
+    </div>
+</form>

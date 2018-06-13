@@ -7,6 +7,19 @@
             box-shadow: 0 0 15px rgba(red, 0.2) inset;
         }
     }
+    .has-button {
+        width: 100%;
+        max-width: calc(100% - 61px);
+    }
+    .icon-button {
+        padding: 0;
+        height: 36px;
+        width: 36px;
+        max-width: 36px;
+        min-width: unset;
+        margin: 0 10px;
+        box-shadow: 0 0 6px rgba(#000, 0.2);
+    }
     div.track-form-wrapper {
         display: flex;
         justify-content: space-evenly;
@@ -49,5 +62,5 @@
             min-height: 45px;
             background-color: palegreen;
         }
-    }
+    }   
 }

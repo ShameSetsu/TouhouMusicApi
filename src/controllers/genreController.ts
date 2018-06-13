@@ -1,19 +1,16 @@
-import * as express from 'express';
-
-import { MongoServer } from '../Mongo';
-import { BaseController } from './baseController';
-import { Event } from '../models/dbModel/event.model';
+import { Genre } from '../models/dbModel/genre.model';
 import { HttpStatus } from '../models/misc/httpStatus.enum';
+import { BaseController } from './baseController';
 
-export class EventController extends BaseController {
+export class GenreController extends BaseController {
     constructor(app, mongo) {
         super();
         this.dataAccess = mongo;
-        this.initCollection('event');
-        app.get('/api/event/all', this.getAllEvent());
+        this.initCollection('genre');
+        app.get('/api/genre/all', this.getAllGenres());
     }
 
-    getAllEvent = () => {
+    getAllGenres = () => {
         return (req, res) => {
             this.collection.find({}).toArray((err, result) => {
                 if (result) {
@@ -27,10 +24,10 @@ export class EventController extends BaseController {
         }
     }
 
-    getEventById(_id: string): Promise<Event> {
-        return new Promise<Event>((resolve, reject)=> {
-            this.collection.findOne({"_id": _id}, (err, result) => {
-                if(err) reject(err);
+    getEventById(_id: string): Promise<Genre> {
+        return new Promise<Genre>((resolve, reject) => {
+            this.collection.findOne({ "_id": _id }, (err, result) => {
+                if (err) reject(err);
                 else resolve(result);
             });
         });

@@ -8,6 +8,7 @@ export class ArtistController extends BaseController {
         this.dataAccess = mongo;
         this.initCollection('artist');
         app.get('/api/artist/all', this.getAllArtists());
+        app.post('/api/artist', this.postOneArtist());
     }
 
     getAllArtists = () => {
@@ -19,6 +20,19 @@ export class ArtistController extends BaseController {
                 else {
                     res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
                     throw (err);
+                }
+            });
+        }
+    }
+
+    postOneArtist = () => {
+        return (req, res) => {
+            this.collection.insertOne(req.body, (err, result) => {
+                if (result) {
+                    res.send(result);
+                }
+                else {
+                    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
                 }
             });
         }
