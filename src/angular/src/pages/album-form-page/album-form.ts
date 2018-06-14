@@ -159,7 +159,7 @@ export class AlbumFormPage {
             }
             let tmpForm = new FormGroup({
                 title: new FormControl(file.name.substr(0, file.name.lastIndexOf(".")), Validators.required),
-                artist: new FormControl(this.albumForm.controls.artist.value, Validators.required),
+                artist: new FormControl(this.albumForm.controls.artist.value.name, Validators.required),
                 duration: new FormControl(0, Validators.required),
                 genre: new FormControl(null, Validators.required),
                 release: new FormControl(this.albumForm.controls.release.value, Validators.required),

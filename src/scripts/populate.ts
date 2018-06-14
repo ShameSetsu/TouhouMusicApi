@@ -7,6 +7,7 @@ import { events } from '../objects/events.object';
 import { genres } from '../objects/genres.object';
 import { members } from '../objects/members.object';
 import { tracks } from '../objects/tracks.objects';
+import { originals } from '../objects/original.object';
 
 MongoClient.connect(MongoServer.mongoUrl, (err, db) => {
     if (err) {
@@ -55,5 +56,12 @@ MongoClient.connect(MongoServer.mongoUrl, (err, db) => {
         .insert(tracks, null, (err, records) => {
             if (err) throw ('track' + err);
             if (records) console.log('track', records);
+        });
+
+    // POPULATE ORIGINALS
+    mongo.collection('original')
+        .insert(originals, null, (err, records) => {
+            if (err) throw ('original' + err);
+            if (records) console.log('original', records);
         });
 });
