@@ -6,4 +6,4 @@ export const events: Array<Event> = [
         date: '2018-05-06',
         name: '博麗神社例大祭15'
     }
-]
+];

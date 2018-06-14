@@ -82,11 +82,23 @@
                 <mat-error>無効入力</mat-error>
             </mat-form-field>
 
-            <mat-form-field>
-                <input type="text" placeholder="原曲" aria-label="Number" matInput formControlName="originalTitle">
-                <mat-hint>必須！</mat-hint>
-                <mat-error>無効入力</mat-error>
-            </mat-form-field>
+            <div style="display: flex;width: 100%;">
+                <mat-form-field class="has-button">
+                    <mat-select placeholder="原曲" formControlName="originalTitle">
+                        <mat-option>--</mat-option>
+                        <mat-optgroup *ngFor="let game of originals" [label]="'東方' + game.touhou">
+                            <mat-option *ngFor="let original of game.tracks" [value]="original">
+                                {{ original.name }}
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
+                    <mat-hint>必須！</mat-hint>
+                    <mat-error>無効入力</mat-error>
+                </mat-form-field>
+                <button (click)="showGenreForm()" class="icon-button" mat-button>
+                    <i class="material-icons">add_circle</i>
+                </button>
+            </div>
 
             <div style="display: flex;width: 100%;">
                 <mat-form-field class="has-button">

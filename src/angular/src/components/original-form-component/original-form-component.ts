@@ -5,26 +5,24 @@ import * as uuidv1 from 'uuid/v1';
 
 import { AlbumFormPage } from '../../pages/album-form-page/album-form';
 import { MusicApiService } from '../../services/musicApiService';
-import * as moment from 'moment';
-import { LocaleService } from '../../services/localeService';
 
 @Component({
-    selector: 'event-form-component',
-    templateUrl: 'event-form-component.html',
-    styleUrls: ['event-form-component.scss']
+    selector: 'original-form-component',
+    templateUrl: 'original-form-component.html',
+    styleUrls: ['original-form-component.scss']
 })
-export class EventFormComponent {
-    eventForm: FormGroup;
+export class OriginalFormComponent {
+    originalForm: FormGroup;
+    touhou: Array<number> = [1,2,3,4,5,6,7,7.5,8,9,9.5,10,10.5,11,12,12.3,12.5,12.8,13,13.5,14,14.3,14.5,15,15.5,16];
 
     constructor(
         public dialogRef: MatDialogRef<AlbumFormPage>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private musicService: MusicApiService,
-        private localeService: LocaleService) {
+        private musicService: MusicApiService) {
 
-        this.eventForm = new FormGroup({
+        this.originalForm = new FormGroup({
             name: new FormControl(null, Validators.required),
-            date: new FormControl({value: null, disabled: true}, Validators.required)
+            touhou: new FormControl(null, Validators.required)
         });
     }
 
@@ -33,10 +31,10 @@ export class EventFormComponent {
     }
 
     post() {
-        this.musicService.postEvent({ _id: uuidv1(), name: this.eventForm.value.name, date: this.localeService.formatDateToDB(this.eventForm.value.date) })
+        this.musicService.postOriginal({ _id: uuidv1(), name: this.originalForm.value.name, touhou: this.originalForm.value.touhou })
             .then(res => {
                 this.dialogRef.close(true);
             })
-            .catch(err => console.error('postEvent error', err));
+            .catch(err => console.error('postOriginal error', err));
     }
 }

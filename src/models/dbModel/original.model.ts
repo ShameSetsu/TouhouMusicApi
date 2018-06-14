@@ -1,4 +1,5 @@
 export type Original = {
     _id: string,
-    name: string
+    name: string,
+    touhou: number
 }

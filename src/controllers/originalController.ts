@@ -1,19 +1,20 @@
-import { BaseController } from './baseController';
-import { Artist } from '../models/dbModel/artist.model';
+import { Genre } from '../models/dbModel/genre.model';
 import { HttpStatus } from '../models/misc/httpStatus.enum';
+import { BaseController } from './baseController';
+import { Original } from '../models/dbModel/original.model';
 
-export class ArtistController extends BaseController {
+export class OriginalController extends BaseController {
     constructor(app, mongo) {
         super();
         this.dataAccess = mongo;
-        this.initCollection('artist');
-        app.get('/api/artist/all', this.getAllArtists());
-        app.post('/api/artist', this.postOneArtist());
+        this.initCollection('original');
+        app.get('/api/original/all', this.getAllOriginals());
+        app.post('/api/original', this.postOneOriginal());
     }
 
-    getAllArtists = () => {
+    getAllOriginals = () => {
         return (req, res) => {
-            this.collection.find({}, {_id: 1, name: 1}).toArray((err, result) => {
+            this.collection.find().sort({touhou: 1}).toArray((err, result) => {
                 if (result) {
                     res.send(result);
                 }
@@ -25,7 +26,7 @@ export class ArtistController extends BaseController {
         }
     }
 
-    postOneArtist = () => {
+    postOneOriginal = () => {
         return (req, res) => {
             this.collection.insertOne(req.body, (err, result) => {
                 if (result) {
@@ -38,8 +39,8 @@ export class ArtistController extends BaseController {
         }
     }
 
-    getArtistById(_id: string): Promise<Artist> {
-        return new Promise<Artist>((resolve, reject) => {
+    getOriginalById(_id: string): Promise<Original> {
+        return new Promise<Original>((resolve, reject) => {
             this.collection.findOne({ "_id": _id }, (err, result) => {
                 if (err) reject(err);
                 else resolve(result);

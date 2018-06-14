@@ -38,7 +38,7 @@ export class GenreController extends BaseController {
         }
     }
 
-    getEventById(_id: string): Promise<Genre> {
+    getGenreById(_id: string): Promise<Genre> {
         return new Promise<Genre>((resolve, reject) => {
             this.collection.findOne({ "_id": _id }, (err, result) => {
                 if (err) reject(err);

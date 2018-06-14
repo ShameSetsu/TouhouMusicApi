@@ -9,7 +9,9 @@ export class MusicApiService {
 
     postAlbum(albumArt, tracks, album): Promise<Response> {
         let picturePayload: FormData = new FormData();
+        console.log('append', albumArt);
         picturePayload.append('picture', albumArt);
+        console.log('picturePayload', picturePayload);
 
         let tracksPayload: FormData = new FormData();
 
@@ -23,7 +25,7 @@ export class MusicApiService {
         let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
         options.headers = headers;
 
-        console.log('picturePayload', picturePayload);
+        console.log('picturePayload', picturePayload.getAll('picture'));
         console.log('tracksPayload', [...tracksPayload['entries']()]);
 
         return new Promise<Response>((resolve, reject) => {
@@ -86,6 +88,20 @@ export class MusicApiService {
         });
     }
 
+    postOriginal(original){
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
+        options.headers = headers;
+        console.log('event', original);
+        return new Promise<Response>((resolve, reject) => {
+            this.http.post('http://localhost:3000/api/original', original).subscribe(
+                res => resolve(res),
+                err => reject(err)
+            );
+        });
+    }
+
     getAllArtists(): Promise<Array<{ _id: string, name: string }>> {
         return new Promise<Array<{ _id: string, name: string }>>((resolve, reject) => {
             this.http.get('http://localhost:3000/api/artist/all').subscribe((res: any) => {
@@ -102,9 +118,17 @@ export class MusicApiService {
         });
     }
 
-    getAllEvents(): Promise<Array<{ _id: string, name: string }>> {
-        return new Promise<Array<{ _id: string, name: string }>>((resolve, reject) => {
+    getAllEvents(): Promise<Array<{ _id: string, name: string, date: string }>> {
+        return new Promise<Array<{ _id: string, name: string, date: string }>>((resolve, reject) => {
             this.http.get('http://localhost:3000/api/event/all').subscribe((res: any) => {
+                resolve(JSON.parse(res._body));
+            }, err => reject(err));
+        });
+    }
+    //api/original/all
+    getAllOriginals(): Promise<Array<{ _id: string, name: string, touhou: number }>> {
+        return new Promise<Array<{ _id: string, name: string, touhou: number }>>((resolve, reject) => {
+            this.http.get('http://localhost:3000/api/original/all').subscribe((res: any) => {
                 resolve(JSON.parse(res._body));
             }, err => reject(err));
         });

@@ -1,6 +1,14 @@
-<form class="dialog-form">
+<form class="dialog-form" [formGroup]="eventForm">
     <mat-form-field class="example-full-width">
-        <input type="text" placeholder="イベント" aria-label="Number" matInput [formControl]="eventForm">
+        <input type="text" placeholder="イベント名" aria-label="Number" matInput formControlName="name">
+        <mat-hint>必須！</mat-hint>
+        <mat-error>無効入力</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [matDatepicker]="dp" placeholder="イベント日" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp panelClass="example-month-picker" disabled="false"></mat-datepicker>
         <mat-hint>必須！</mat-hint>
         <mat-error>無効入力</mat-error>
     </mat-form-field>

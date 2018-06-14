@@ -1,0 +1,25 @@
+<form class="dialog-form" [formGroup]="originalForm">
+    <mat-form-field class="example-full-width">
+        <input type="text" placeholder="原曲" aria-label="Number" matInput formControlName="name">
+        <mat-hint>必須！</mat-hint>
+        <mat-error>無効入力</mat-error>
+    </mat-form-field>
+
+    <div style="display: flex;width: 100%;">
+        <mat-form-field class="has-button">
+            <mat-select placeholder="東方" formControlName="genre" multiple>
+                <mat-option>--</mat-option>
+                <mat-option *ngFor="let game of touhou" [value]="game">
+                    {{ game }}
+                </mat-option>
+            </mat-select>
+            <mat-hint>必須！</mat-hint>
+            <mat-error>無効入力</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="button-wrapper">
+        <button mat-button (click)="close()">閉じる</button>
+        <button mat-button (click)="post()">確かめる</button>
+    </div>
+</form>

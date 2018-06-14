@@ -11,6 +11,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 import { ArtistController } from './artistController';
 import { EventController } from './eventController';
 import { GenreController } from './genreController';
+import { OriginalController } from './originalController';
 
 export class MusicController extends BaseController {
     trackCtrl: TrackController;
@@ -18,6 +19,7 @@ export class MusicController extends BaseController {
     artistCtrl: ArtistController;
     eventCtrl: EventController;
     genreCtrl: GenreController;
+    originalCtrl: OriginalController;
 
     constructor(app, mongo) {
         super();
@@ -26,6 +28,7 @@ export class MusicController extends BaseController {
         this.artistCtrl = new ArtistController(app, mongo);
         this.eventCtrl = new EventController(app, mongo);
         this.genreCtrl = new GenreController(app, mongo);
+        this.originalCtrl = new OriginalController(app, mongo);
         app.post('/api/album/tracks', this.postAlbumFiles());
         app.post('/api/album/thumbnail', this.postAlbumThumbnail());
         app.post('/api/album', this.postAlbum());

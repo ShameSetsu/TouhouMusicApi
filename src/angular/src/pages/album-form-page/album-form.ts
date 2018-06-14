@@ -18,6 +18,7 @@ import { ArtistFormComponent } from '../../components/artist-form-component/arti
 import { EventFormComponent } from '../../components/event-form-component/event-form-component';
 import { GenreFormComponent } from '../../components/genre-form-component/genre-form-component';
 import { MusicApiService } from '../../services/musicApiService';
+import { OriginalFormComponent } from '../../components/original-form-component/original-form-component';
 
 
 @Component({
@@ -36,10 +37,12 @@ export class AlbumFormPage {
     artists: Array<{ _id: string, name: string }> = [];
     filteredArtists: Observable<Array<{ _id: string, name: string }>>;
 
-    events: Array<{ _id: string, name: string }> = [];
+    events: Array<{ _id: string, name: string, date: string }> = [];
     filteredEvents: Observable<Array<{ _id: string, name: string }>>;
 
     genres: Array<{ _id: string, name: string }> = [];
+
+    originals: Array<{ touhou: number, tracks: Array<{ _id: string, name: string }> }> = [];
 
     constructor(private musicApi: MusicApiService,
         public dialog: MatDialog) {
@@ -53,16 +56,19 @@ export class AlbumFormPage {
         forkJoin(
             this.musicApi.getAllArtists(),
             this.musicApi.getAllGenres(),
-            this.musicApi.getAllEvents()
+            this.musicApi.getAllEvents(),
+            this.musicApi.getAllOriginals()
         )
             .subscribe(res => {
                 this.artists = res[0];
                 this.genres = res[1];
                 this.events = res[2];
+                this.originals = this.formatOriginalSong(res[3])
                 console.log('artists', this.artists);
                 console.log('genres', this.genres);
                 console.log('events', this.events);
-            }, err => console.error('getAllArtists Error', err));
+                console.log('originals', this.originals);
+            }, err => console.error('GET_ALL_DATA Error', err));
     }
 
     ngOnInit() {
@@ -77,12 +83,18 @@ export class AlbumFormPage {
                 }
             });
         this.albumForm.controls.event.valueChanges
-            .subscribe(val => {
-                if (!val._id || !val.name || typeof !val._id == 'string' || typeof !val.name == 'string' || !(val._id.length > 0) || typeof !val.name == 'string' || !(val.name.length > 0)) {
+            .distinctUntilChanged()
+            .subscribe((val: { _id: string, name: string, date: string }) => {
+                console.log('event', val);
+                if (!val._id || !val.name || !val.date
+                    || typeof val._id != 'string' || typeof val.name != 'string' || typeof val.date != 'string'
+                    || !(val._id.length > 0) || !(val.name.length > 0) || !(val.date.length > 0)) {
                     this.albumForm.controls.event.setErrors(<ValidationErrors>{
                         error: 'invalidObject'
                     });
                 }
+                this.albumForm.controls.release.setValue(val.date);
+                console.log(this.albumForm.value);
             });
         this.filteredArtists = this.albumForm.controls.artist.valueChanges
             .pipe(
@@ -104,13 +116,35 @@ export class AlbumFormPage {
     postAlbum() {
         const album = {
             artist: this.albumForm.controls.artist.value._id,
-            event: this.albumForm.controls.event.value,
+            event: this.albumForm.controls.event.value._id,
             name: this.albumForm.controls.name.value,
-            release: this.albumForm.controls.release.value,
-            tracks: this.trackForms.map(trackForm => trackForm.value),
+            release: this.albumForm.controls.event.value.date,
+            tracks: this.trackForms.map(trackForm => {
+                console.log('trackFormtrackForm.value', trackForm.value);
+                console.log('trackFormtrackForm.value MAPPED', {
+                    title: trackForm.value.title,
+                    artist: trackForm.value.artist,
+                    genre: trackForm.value.genre.map(genre => genre._id),
+                    release: trackForm.value.release,
+                    arrangement: trackForm.value.arrangement,
+                    lyrics: trackForm.value.lyrics,
+                    originalTitle: trackForm.value.originalTitle,
+                });
+                return {
+                    title: trackForm.value.title,
+                    artist: trackForm.value.artist,
+                    genre: trackForm.value.genre.map(genre => genre._id),
+                    release: trackForm.value.release,
+                    arrangement: trackForm.value.arrangement,
+                    lyrics: trackForm.value.lyrics,
+                    originalTitle: trackForm.value.originalTitle,
+                    vocal: trackForm.value.vocal
+                }
+            }),
             website: this.albumForm.controls.website.value,
         };
         console.log('album', album);
+        console.log('picture', this.picture);
         this.musicApi.postAlbum(this.picture, this.tracks, album)
             .then(res => {
                 console.log('POST SUCCESS', res);
@@ -207,6 +241,30 @@ export class AlbumFormPage {
                     .catch(err => console.error('getAllGenres error', err));
             }
         });
+    }
+
+    showOriginalForm() {
+        let dialogRef = this.dialog.open(OriginalFormComponent);
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this.musicApi.getAllOriginals()
+                    .then(res => this.originals = this.formatOriginalSong(res))
+                    .catch(err => console.error('getAllGenres error', err));
+            }
+        });
+    }
+
+    formatOriginalSong(originals: Array<{ _id: string, name: string, touhou: number }>) {
+        let result: Array<{ touhou: number, tracks: Array<{ _id: string, name: string }> }> = [];
+        originals.forEach(original => {
+            if (result.find(group => group.touhou == original.touhou) != null)
+                result.find(group => group.touhou == original.touhou)
+                    .tracks.push({ _id: original._id, name: original.name });
+            else result.push({ touhou: original.touhou, tracks: [{ _id: original._id, name: original.name }] });
+
+        });
+        console.log('result', result);
+        return result;
     }
 
     filterArtists(val: string): Array<{ _id: string, name: string }> {
