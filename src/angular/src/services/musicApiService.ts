@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
-import { Observable } from "rxjs/Observable";
+import { Injectable } from '@angular/core';
+import { Headers, RequestOptionsArgs, Response } from '@angular/http';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { ApiService } from "./apiService";
+
+import { ApiService } from './apiService';
 
 @Injectable()
 export class MusicApiService {

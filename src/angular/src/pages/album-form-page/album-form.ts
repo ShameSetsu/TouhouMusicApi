@@ -1,15 +1,7 @@
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/switchMap';
-
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { map, startWith } from 'rxjs/operators';
@@ -19,7 +11,6 @@ import { EventFormComponent } from '../../components/event-form-component/event-
 import { GenreFormComponent } from '../../components/genre-form-component/genre-form-component';
 import { OriginalFormComponent } from '../../components/original-form-component/original-form-component';
 import { MusicApiService } from '../../services/musicApiService';
-import { Router } from '@angular/router';
 
 
 @Component({

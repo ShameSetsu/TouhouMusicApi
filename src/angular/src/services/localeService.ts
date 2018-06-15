@@ -1,6 +1,6 @@
+import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LocaleService {
@@ -22,7 +22,7 @@ export class LocaleService {
         }
     }
 
-    formatDateToDB(date: Date){
+    formatDateToDB(date: Date) {
         return moment(date).format('YYYY-MM-DD');
     }
 }
