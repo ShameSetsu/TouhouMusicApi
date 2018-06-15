@@ -7,6 +7,6 @@
 
     <div class="button-wrapper">
         <button mat-button (click)="close()">閉じる</button>
-        <button mat-button (click)="post()">確かめる</button>
+        <button [disabled]="!genreForm.valid" mat-button (click)="post()">確かめる</button>
     </div>
 </form>

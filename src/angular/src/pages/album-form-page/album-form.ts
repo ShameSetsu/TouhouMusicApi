@@ -128,7 +128,8 @@ export class AlbumFormPage {
                     release: trackForm.value.release,
                     arrangement: trackForm.value.arrangement,
                     lyrics: trackForm.value.lyrics,
-                    originalTitle: trackForm.value.originalTitle,
+                    originalTitle: trackForm.value.originalTitle._id,
+                    format: trackForm.value.format
                 });
                 return {
                     title: trackForm.value.title,
@@ -137,8 +138,9 @@ export class AlbumFormPage {
                     release: trackForm.value.release,
                     arrangement: trackForm.value.arrangement,
                     lyrics: trackForm.value.lyrics,
-                    originalTitle: trackForm.value.originalTitle,
-                    vocal: trackForm.value.vocal
+                    originalTitle: trackForm.value.originalTitle._id,
+                    vocal: trackForm.value.vocal,
+                    format: trackForm.value.format
                 }
             }),
             website: this.albumForm.controls.website.value,
@@ -183,7 +185,7 @@ export class AlbumFormPage {
 
     dropTracks(ev) {
         ev.preventDefault();
-        console.log('this.files', this.tracks);
+        console.log('event', ev);
         let tpmForms = [];
         let forbidden = false;
         Object.values(ev.dataTransfer.files).forEach((file: any) => {
@@ -194,14 +196,15 @@ export class AlbumFormPage {
             let tmpForm = new FormGroup({
                 title: new FormControl(file.name.substr(0, file.name.lastIndexOf(".")), Validators.required),
                 artist: new FormControl(this.albumForm.controls.artist.value.name, Validators.required),
-                duration: new FormControl(0, Validators.required),
                 genre: new FormControl(null, Validators.required),
-                release: new FormControl(this.albumForm.controls.release.value, Validators.required),
+                release: new FormControl(this.albumForm.controls.release.value),
                 arrangement: new FormControl(null),
                 lyrics: new FormControl(null),
-                originalTitle: new FormControl(null),
-                vocal: new FormControl(null)
+                originalTitle: new FormControl(null, Validators.required),
+                vocal: new FormControl(null),
+                format: new FormControl(file.type.split('/')[1])
             });
+            console.log('tmpForm', tmpForm.value);
             tpmForms.push(tmpForm);
         });
         if (forbidden) return;
@@ -273,5 +276,16 @@ export class AlbumFormPage {
 
     filterEvents(val: string): Array<{ _id: string, name: string }> {
         return (typeof val == 'string') ? this.events.filter(event => event.name.toLowerCase().includes(val.toLowerCase())) : null;
+    }
+
+    checkForm(): boolean {
+        let valid = false;
+        if(!this.albumForm.valid || !this.picture || !this.tracks) return valid;
+        valid = true;
+        this.trackForms.forEach(form=>{
+            console.log('form', form, 'valid', form.valid)
+            if(!form.valid) valid = false;
+        });
+        return valid;
     }
 }

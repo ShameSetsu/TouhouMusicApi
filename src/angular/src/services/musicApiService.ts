@@ -2,21 +2,20 @@ import { Injectable } from "@angular/core";
 import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Observable } from "rxjs/Observable";
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { ApiService } from "./apiService";
 
 @Injectable()
 export class MusicApiService {
-    constructor(private http: Http) { }
+    constructor(private api: ApiService) { }
 
-    postAlbum(albumArt, tracks, album): Promise<Response> {
+    postAlbum(albumArt, tracks: Array<any>, album): Promise<Response> {
+        console.log('POST', album);
         let picturePayload: FormData = new FormData();
-        console.log('append', albumArt);
         picturePayload.append('picture', albumArt);
-        console.log('picturePayload', picturePayload);
 
         let tracksPayload: FormData = new FormData();
 
         tracks.forEach((track, index) => {
-            console.log('addTrackToPayload', track, index);
             tracksPayload.append('track' + index, track);
         });
 
@@ -25,17 +24,19 @@ export class MusicApiService {
         let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
         options.headers = headers;
 
-        console.log('picturePayload', picturePayload.getAll('picture'));
-        console.log('tracksPayload', [...tracksPayload['entries']()]);
-
         return new Promise<Response>((resolve, reject) => {
             forkJoin(
-                this.http.post('http://localhost:3000/api/album/thumbnail', picturePayload),
-                this.http.post('http://localhost:3000/api/album/tracks', tracksPayload)
+                this.api.post('http://localhost:3000/api/album/thumbnail', picturePayload),
+                this.api.post('http://localhost:3000/api/album/tracks', tracksPayload)
             ).subscribe(res => {
                 console.log('forkJoin res', res);
                 console.log('postAlbum');
-                this.http.post('http://localhost:3000/api/album', album, options).subscribe(res => {
+                album.tracks.forEach((track, i) => {
+                    console.log('TRACK', track, 'res[i]', res[1][i]);
+                    track.file = res[1][i]
+                });
+
+                this.api.post('http://localhost:3000/api/album', album, options).subscribe(res => {
                     console.log('postAlbumRes', res);
                     resolve(res);
                 }, err => {
@@ -53,7 +54,7 @@ export class MusicApiService {
         options.headers = headers;
         console.log('artist', artist);
         return new Promise<Response>((resolve, reject) => {
-            this.http.post('http://localhost:3000/api/artist', artist).subscribe(
+            this.api.post('http://localhost:3000/api/artist', artist).subscribe(
                 res => resolve(res),
                 err => reject(err)
             );
@@ -67,7 +68,7 @@ export class MusicApiService {
         options.headers = headers;
         console.log('genre', genre);
         return new Promise<Response>((resolve, reject) => {
-            this.http.post('http://localhost:3000/api/genre', genre).subscribe(
+            this.api.post('http://localhost:3000/api/genre', genre).subscribe(
                 res => resolve(res),
                 err => reject(err)
             );
@@ -81,21 +82,21 @@ export class MusicApiService {
         options.headers = headers;
         console.log('event', event);
         return new Promise<Response>((resolve, reject) => {
-            this.http.post('http://localhost:3000/api/event', event).subscribe(
+            this.api.post('http://localhost:3000/api/event', event).subscribe(
                 res => resolve(res),
                 err => reject(err)
             );
         });
     }
 
-    postOriginal(original){
+    postOriginal(original) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
         options.headers = headers;
         console.log('event', original);
         return new Promise<Response>((resolve, reject) => {
-            this.http.post('http://localhost:3000/api/original', original).subscribe(
+            this.api.post('http://localhost:3000/api/original', original).subscribe(
                 res => resolve(res),
                 err => reject(err)
             );
@@ -104,32 +105,32 @@ export class MusicApiService {
 
     getAllArtists(): Promise<Array<{ _id: string, name: string }>> {
         return new Promise<Array<{ _id: string, name: string }>>((resolve, reject) => {
-            this.http.get('http://localhost:3000/api/artist/all').subscribe((res: any) => {
-                resolve(JSON.parse(res._body));
+            this.api.get('http://localhost:3000/api/artist/all').subscribe((res: any) => {
+                resolve(res);
             }, err => reject(err));
         });
     }
 
     getAllGenres(): Promise<Array<{ _id: string, name: string }>> {
         return new Promise<Array<{ _id: string, name: string }>>((resolve, reject) => {
-            this.http.get('http://localhost:3000/api/genre/all').subscribe((res: any) => {
-                resolve(JSON.parse(res._body));
+            this.api.get('http://localhost:3000/api/genre/all').subscribe((res: any) => {
+                resolve(res);
             }, err => reject(err));
         });
     }
 
     getAllEvents(): Promise<Array<{ _id: string, name: string, date: string }>> {
         return new Promise<Array<{ _id: string, name: string, date: string }>>((resolve, reject) => {
-            this.http.get('http://localhost:3000/api/event/all').subscribe((res: any) => {
-                resolve(JSON.parse(res._body));
+            this.api.get('http://localhost:3000/api/event/all').subscribe((res: any) => {
+                resolve(res);
             }, err => reject(err));
         });
     }
     //api/original/all
     getAllOriginals(): Promise<Array<{ _id: string, name: string, touhou: number }>> {
         return new Promise<Array<{ _id: string, name: string, touhou: number }>>((resolve, reject) => {
-            this.http.get('http://localhost:3000/api/original/all').subscribe((res: any) => {
-                resolve(JSON.parse(res._body));
+            this.api.get('http://localhost:3000/api/original/all').subscribe((res: any) => {
+                resolve(res);
             }, err => reject(err));
         });
     }

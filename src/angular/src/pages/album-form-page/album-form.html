@@ -52,7 +52,7 @@
     </mat-card>
 </form>
 
-<div class="upload-fields">
+<div class="upload-fields" *ngIf="albumForm.valid">
     <mat-card class="upload-label" (drop)="dropTracks($event)" (dragover)="allowDrop($event)">
         <label class="label">音楽</label>
         <div class="img-label">
@@ -72,7 +72,7 @@
     </mat-card>
 </div>
 
-<div class="track-form-wrapper">
+<div class="track-form-wrapper" *ngIf="albumForm.valid && tracks && picture">
     <form [formGroup]="trackForm" *ngFor="let trackForm of trackForms; let i = index">
         <mat-card class="track-field">
 
@@ -85,7 +85,7 @@
             <div style="display: flex;width: 100%;">
                 <mat-form-field class="has-button">
                     <mat-select placeholder="原曲" formControlName="originalTitle">
-                        <mat-option>--</mat-option>
+                        <mat-option disabled>--</mat-option>
                         <mat-optgroup *ngFor="let game of originals" [label]="'東方' + game.touhou">
                             <mat-option *ngFor="let original of game.tracks" [value]="original">
                                 {{ original.name }}
@@ -103,7 +103,7 @@
             <div style="display: flex;width: 100%;">
                 <mat-form-field class="has-button">
                     <mat-select placeholder="ジャンル" formControlName="genre" multiple>
-                        <mat-option>--</mat-option>
+                        <mat-option disabled>--</mat-option>
                         <mat-option *ngFor="let genre of genres" [value]="genre">
                             {{ genre.name }}
                         </mat-option>
@@ -133,5 +133,5 @@
 </div>
 
 <div class="button-wrapper">
-    <button mat-button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
+    <button [disabled]="!checkForm()" mat-button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
 </div>

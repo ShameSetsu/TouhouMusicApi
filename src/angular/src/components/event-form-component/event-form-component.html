@@ -15,6 +15,6 @@
 
     <div class="button-wrapper">
         <button mat-button (click)="close()">閉じる</button>
-        <button mat-button (click)="post()">確かめる</button>
+        <button [disabled]="!eventForm.valid" mat-button (click)="post()">確かめる</button>
     </div>
 </form>

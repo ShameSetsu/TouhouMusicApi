@@ -29,6 +29,7 @@ import { MusicApiService } from '../services/musicApiService';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './routes';
 import { OriginalFormComponent } from '../components/original-form-component/original-form-component';
+import { ApiService } from '../services/apiService';
 
 function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -72,7 +73,8 @@ function createTranslateLoader(http: HttpClient) {
     providers: [
         MusicApiService,
         LocaleService,
-        TranslateService
+        TranslateService,
+        ApiService
     ],
     entryComponents: [
         ArtistFormComponent,
