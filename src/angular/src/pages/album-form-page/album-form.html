@@ -135,3 +135,9 @@
 <div class="button-wrapper">
     <button [disabled]="!checkForm()" mat-button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
 </div>
+
+<div class="loading" *ngIf="loading">
+    <div class="progress-bar-wrapper">
+        <mat-progress-bar class="progress-bar" mode="indeterminate"></mat-progress-bar>
+    </div>
+</div>

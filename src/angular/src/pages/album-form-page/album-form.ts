@@ -17,8 +17,8 @@ import { map, startWith } from 'rxjs/operators';
 import { ArtistFormComponent } from '../../components/artist-form-component/artist-form-component';
 import { EventFormComponent } from '../../components/event-form-component/event-form-component';
 import { GenreFormComponent } from '../../components/genre-form-component/genre-form-component';
-import { MusicApiService } from '../../services/musicApiService';
 import { OriginalFormComponent } from '../../components/original-form-component/original-form-component';
+import { MusicApiService } from '../../services/musicApiService';
 
 
 @Component({
@@ -33,6 +33,7 @@ export class AlbumFormPage {
     tracks: Array<any>;
     allowedFile = ['audio/mp3'];
     picture;
+    loading: boolean = true;
 
     artists: Array<{ _id: string, name: string }> = [];
     filteredArtists: Observable<Array<{ _id: string, name: string }>>;
@@ -63,20 +64,23 @@ export class AlbumFormPage {
                 this.artists = res[0];
                 this.genres = res[1];
                 this.events = res[2];
-                this.originals = this.formatOriginalSong(res[3])
+                this.originals = this.formatOriginalSong(res[3]);
+                this.loading = false;
                 console.log('artists', this.artists);
                 console.log('genres', this.genres);
                 console.log('events', this.events);
                 console.log('originals', this.originals);
-            }, err => console.error('GET_ALL_DATA Error', err));
+            }, err => {
+                console.error('GET_ALL_DATA Error', err);
+                alert('GET_ALL_DATA Error' + err);
+                this.loading = false;
+            });
     }
 
     ngOnInit() {
-        console.log('ngOnInit');
         this.albumForm.controls.artist.valueChanges
             .subscribe(val => {
-                console.log('artist sub', val);
-                if (!val._id || !val.name || typeof !val._id == 'string' || typeof !val.name == 'string' || !(val._id.length > 0) || typeof !val.name == 'string' || !(val.name.length > 0)) {
+                if (!val || !val._id || !val.name || typeof !val._id == 'string' || typeof !val.name == 'string' || !(val._id.length > 0) || typeof !val.name == 'string' || !(val.name.length > 0)) {
                     this.albumForm.controls.artist.setErrors(<ValidationErrors>{
                         error: 'invalidObject'
                     });
@@ -85,23 +89,23 @@ export class AlbumFormPage {
         this.albumForm.controls.event.valueChanges
             .distinctUntilChanged()
             .subscribe((val: { _id: string, name: string, date: string }) => {
-                console.log('event', val);
-                if (!val._id || !val.name || !val.date
+                if (!val || !val._id || !val.name || !val.date
                     || typeof val._id != 'string' || typeof val.name != 'string' || typeof val.date != 'string'
                     || !(val._id.length > 0) || !(val.name.length > 0) || !(val.date.length > 0)) {
                     this.albumForm.controls.event.setErrors(<ValidationErrors>{
                         error: 'invalidObject'
                     });
+                } else {
+                    this.albumForm.controls.release.setValue(val.date);
+                    console.log(this.albumForm.value);
                 }
-                this.albumForm.controls.release.setValue(val.date);
-                console.log(this.albumForm.value);
             });
+
         this.filteredArtists = this.albumForm.controls.artist.valueChanges
             .pipe(
                 startWith(''),
                 map(val => this.filterArtists(val))
             );
-        this.filteredArtists.subscribe(res => console.log('filtered Artist', res));
         this.filteredEvents = this.albumForm.controls.event.valueChanges
             .pipe(
                 startWith(''),
@@ -114,23 +118,13 @@ export class AlbumFormPage {
     }
 
     postAlbum() {
+        this.loading = true;
         const album = {
             artist: this.albumForm.controls.artist.value._id,
             event: this.albumForm.controls.event.value._id,
             name: this.albumForm.controls.name.value,
             release: this.albumForm.controls.event.value.date,
             tracks: this.trackForms.map(trackForm => {
-                console.log('trackFormtrackForm.value', trackForm.value);
-                console.log('trackFormtrackForm.value MAPPED', {
-                    title: trackForm.value.title,
-                    artist: trackForm.value.artist,
-                    genre: trackForm.value.genre.map(genre => genre._id),
-                    release: trackForm.value.release,
-                    arrangement: trackForm.value.arrangement,
-                    lyrics: trackForm.value.lyrics,
-                    originalTitle: trackForm.value.originalTitle._id,
-                    format: trackForm.value.format
-                });
                 return {
                     title: trackForm.value.title,
                     artist: trackForm.value.artist,
@@ -145,14 +139,14 @@ export class AlbumFormPage {
             }),
             website: this.albumForm.controls.website.value,
         };
-        console.log('album', album);
-        console.log('picture', this.picture);
         this.musicApi.postAlbum(this.picture, this.tracks, album)
             .then(res => {
                 console.log('POST SUCCESS', res);
+                this.resetForms();
+                this.loading = false;
             })
             .catch(err => {
-                console.log('POST ERROR', err);
+                console.error('POST ERROR', err);
             })
     }
 
@@ -280,12 +274,18 @@ export class AlbumFormPage {
 
     checkForm(): boolean {
         let valid = false;
-        if(!this.albumForm.valid || !this.picture || !this.tracks) return valid;
+        if (!this.albumForm.valid || !this.picture || !this.tracks) return valid;
         valid = true;
-        this.trackForms.forEach(form=>{
-            console.log('form', form, 'valid', form.valid)
-            if(!form.valid) valid = false;
+        this.trackForms.forEach(form => {
+            if (!form.valid) valid = false;
         });
         return valid;
+    }
+
+    resetForms() {
+        this.picture = null;
+        this.tracks = null;
+        this.trackForms = [];
+        this.albumForm.reset();
     }
 }
