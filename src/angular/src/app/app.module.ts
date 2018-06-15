@@ -14,6 +14,7 @@ import {
     MatSelectModule,
     MatToolbarModule,
     MatProgressBarModule,
+    MatSnackBarModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -62,6 +63,7 @@ function createTranslateLoader(http: HttpClient) {
         MatDatepickerModule,
         MatNativeDateModule,
         MatAutocompleteModule,
+        MatSnackBarModule,
         BrowserAnimationsModule,
         FormsModule,
         TranslateModule.forRoot({

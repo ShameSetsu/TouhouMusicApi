@@ -135,6 +135,7 @@
 <div class="button-wrapper">
     <button [disabled]="!checkForm()" mat-button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
 </div>
+<button (click)="openSnackBar('アップロードに成功しました')">SNACK</button>
 
 <div class="loading" *ngIf="loading">
     <div class="progress-bar-wrapper">

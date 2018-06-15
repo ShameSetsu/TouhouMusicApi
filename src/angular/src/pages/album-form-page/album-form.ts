@@ -9,7 +9,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { map, startWith } from 'rxjs/operators';
@@ -19,6 +19,7 @@ import { EventFormComponent } from '../../components/event-form-component/event-
 import { GenreFormComponent } from '../../components/genre-form-component/genre-form-component';
 import { OriginalFormComponent } from '../../components/original-form-component/original-form-component';
 import { MusicApiService } from '../../services/musicApiService';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -46,7 +47,9 @@ export class AlbumFormPage {
     originals: Array<{ touhou: number, tracks: Array<{ _id: string, name: string }> }> = [];
 
     constructor(private musicApi: MusicApiService,
-        public dialog: MatDialog) {
+        public dialog: MatDialog,
+        private snackBar: MatSnackBar,
+        private router: Router) {
         this.albumForm = new FormGroup({
             artist: new FormControl(null, [Validators.required]),
             event: new FormControl(null, Validators.required),
@@ -72,7 +75,8 @@ export class AlbumFormPage {
                 console.log('originals', this.originals);
             }, err => {
                 console.error('GET_ALL_DATA Error', err);
-                alert('GET_ALL_DATA Error' + err);
+                alert('GET_ALL_DATA Error: ' + err);
+                this.router.navigate(['/']);
                 this.loading = false;
             });
     }
@@ -143,10 +147,12 @@ export class AlbumFormPage {
             .then(res => {
                 console.log('POST SUCCESS', res);
                 this.resetForms();
+                this.openSnackBar('アップロードに成功しました');
                 this.loading = false;
             })
             .catch(err => {
                 console.error('POST ERROR', err);
+                alert('POST ERROR: ' + err);
             })
     }
 
@@ -280,6 +286,12 @@ export class AlbumFormPage {
             if (!form.valid) valid = false;
         });
         return valid;
+    }
+
+    openSnackBar(message: string) {
+        this.snackBar.open(message, null, {
+            duration: 2000,
+        });
     }
 
     resetForms() {
