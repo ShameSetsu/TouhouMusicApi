@@ -14,9 +14,10 @@
     .icon-button {
         padding: 0;
         height: 36px;
+        min-height: 36px;
         width: 36px;
+        min-width: 36px;
         max-width: 36px;
-        min-width: unset;
         margin: 0 10px;
         box-shadow: 0 0 6px rgba(#000, 0.2);
     }

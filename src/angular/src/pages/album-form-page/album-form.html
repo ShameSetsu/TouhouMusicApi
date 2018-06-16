@@ -111,6 +111,9 @@
                     <mat-hint>必須！</mat-hint>
                     <mat-error>無効入力</mat-error>
                 </mat-form-field>
+                <button *ngIf="i == 0" [disabled]="!trackForm.controls.genre.valid" (click)="applyGenreToAll()" class="icon-button" mat-button>
+                    <i class="material-icons">input</i>
+                </button>
                 <button (click)="showGenreForm()" class="icon-button" mat-button>
                     <i class="material-icons">add_circle</i>
                 </button>
@@ -135,7 +138,6 @@
 <div class="button-wrapper">
     <button [disabled]="!checkForm()" mat-button class="submit-album" type="submit" (click)="postAlbum()">アップロード</button>
 </div>
-<button (click)="openSnackBar('アップロードに成功しました')">SNACK</button>
 
 <div class="loading" *ngIf="loading">
     <div class="progress-bar-wrapper">

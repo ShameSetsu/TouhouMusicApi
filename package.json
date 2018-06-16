@@ -6,12 +6,13 @@
   "scripts": {
     "babel-node": "babel-node --presets=latest",
     "apply-fixture": "node dist/scripts/populate.js",
-    "linux-start": "sudo rm -r dist; npm run angular; tsc; node dist/index.js",
+    "linux-build": "npm run init-dist; npm run angular; tsc",
+    "linux-start": "npm run init-dist; npm run angular; tsc; node dist/index.js",
     "start": "rd /s /q dist & ng build & tsc & npm run copy-files & node ./dist/index.js",
     "node": "rd /s /q dist & tsc & npm run copy-files & cls & node dist/index.js",
     "copy-files": "copyfiles -f src/public/music/* dist/public/music & copyfiles -f src/public/thumbnail/* dist/public/thumbnail",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "rm-dist": "rd /s /q dist",
+    "init-dist": "sudo rm -f dist/*; sudo rm -r dist/controllers; sudo rm -r dist/models; sudo rm -r dist/objects; sudo rm -r dist/routes; sudo rm -r dist/scripts; sudo rm -r dist/public/angular",
     "serve": "ng serve ./src/angular"
   },
   "author": "ShameiSetsu",

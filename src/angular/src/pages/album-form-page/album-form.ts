@@ -147,23 +147,18 @@ export class AlbumFormPage {
             })
     }
 
-    dragFilesDropped(files) {
-        console.log('droped files', files);
-    }
-
-    filesChange(files) {
-        console.log('fileChange event', files);
-        console.log('fileChange files', files.srcElement.files);
+    applyGenreToAll(){
+        this.trackForms.forEach((trackForm, i)=>{
+            if(i != 0) trackForm.controls.genre.setValue(this.trackForms[0].controls.genre.value)
+        });
     }
 
     allowDrop(ev) {
         ev.preventDefault();
-        return true;
     }
 
     drag(ev) {
         ev.dataTransfer.setData("text", ev.target.id);
-        console.log('dragev', ev);
     }
 
     dropPicture(ev) {
