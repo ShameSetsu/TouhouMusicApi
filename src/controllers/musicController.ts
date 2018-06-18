@@ -16,13 +16,13 @@ import { EventController } from './eventController';
 import { GenreController } from './genreController';
 import { OriginalController } from './originalController';
 import { TrackController } from './trackController';
+import { AlbumTrackOutDto } from '../models/outDto/albumTrackOutDto';
 
 export class MusicController extends BaseController {
     trackCtrl: TrackController;
     albumCtrl: AlbumController;
     artistCtrl: ArtistController;
     eventCtrl: EventController;
-    genreCtrl: GenreController;
     originalCtrl: OriginalController;
 
     constructor(app, mongo) {
@@ -31,12 +31,24 @@ export class MusicController extends BaseController {
         this.albumCtrl = new AlbumController(app, mongo);
         this.artistCtrl = new ArtistController(app, mongo);
         this.eventCtrl = new EventController(app, mongo);
-        this.genreCtrl = new GenreController(app, mongo);
         this.originalCtrl = new OriginalController(app, mongo);
         app.post('/api/album/tracks', this.postAlbumFiles());
         app.post('/api/album/thumbnail', this.postAlbumThumbnail());
         app.post('/api/album', this.postAlbum());
         app.get('/api/album/test', this.getTestAlbum());
+        app.get('/api/album/all', this.getAllAlbum());
+        app.get('/api/track/all', this.getAllTracks());
+    }
+
+    getAllTracks = () => {
+        return (req, res)=>{
+            console.log('req.body', req.body);
+            this.trackCtrl.getAllTracks().then(tracksFound=>{
+                this.getTracksInfo(tracksFound).then(tracks=>{
+                    res.send(tracks);
+                })
+            })
+        }
     }
 
     getTestAlbum = () => {
@@ -47,13 +59,45 @@ export class MusicController extends BaseController {
                     this.artistCtrl.getArtistById(album.artist),
                     this.eventCtrl.getEventById(album.event)
                 ).subscribe((response: any) => {
-                    album.tracks = response[0];
-                    album.artist = response[1].name;
-                    album.event = response[2].name;
-                    album.thumbnail = Settings.host + ':' + Settings.port + '/files/thumbnail/' + album.thumbnail + '.jpg';
-                    res.send(album);
+                    this.getTracksInfo(response[0]).then(tracks => {
+                        console.log('TRACK ', tracks)
+                        album.tracks = tracks;
+                        album.artist = { _id: album.artist, name: response[1].name };
+                        album.event = { _id: album.event, name: response[2].name };
+                        album.thumbnail = Settings.host + ':' + Settings.port + '/files/thumbnail/' + album.thumbnail + '.jpg';
+                        res.send(album);
+                    });
                 });
             }).catch(err => { throw ('getAlbumById' + err) });
+        }
+    }
+
+    getAllAlbum = () => {
+        return (req, res) => {
+            this.albumCtrl.getAllAlbum().then((albums: Array<any>) => {
+                const promises: Array<Promise<any>> = albums.map(album => {
+                    return new Promise((resolve, reject) => {
+                        forkJoin(
+                            this.trackCtrl.getTracksByAlbum('0f717066-6dab-11e8-adc0-fa7ae01bbebc'),
+                            this.artistCtrl.getArtistById(album.artist),
+                            this.eventCtrl.getEventById(album.event)
+                        ).subscribe((response: any) => {
+                            this.getTracksInfo(response[0]).then(tracks => {
+                                album.tracks = tracks;
+                                album.artist = { _id: album.artist, name: response[1].name };
+                                album.event = { _id: album.event, name: response[2].name };
+                                album.thumbnail = Settings.host + ':' + Settings.port + '/files/thumbnail/' + album.thumbnail + '.jpg';
+                                tracks.forEach(track=>track.albumThumbnail = album.thumbnail);
+                                resolve();
+                            })
+                            .catch(err=>reject(err));
+                        }, err => reject(err));
+                    });
+                });
+                Promise.all(promises).then(() => {
+                    res.send(albums);
+                }).catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err));
+            });
         }
     }
 
@@ -61,8 +105,6 @@ export class MusicController extends BaseController {
         return (req, res) => {
             if (!req.files)
                 return res.status(HttpStatus.BAD_REQUEST).send('No files were uploaded.');
-
-            let fileIds: Array<string> = [];
 
             this.copyFiles(Object.values(req.files), 'music')
                 .then(files => res.send(files))
@@ -74,8 +116,6 @@ export class MusicController extends BaseController {
         return (req, res) => {
             if (!req.files)
                 return res.status(HttpStatus.BAD_REQUEST).send('No files were uploaded.');
-
-            let fileIds: Array<string> = [];
 
             this.copyFiles(Object.values(req.files), 'thumbnail')
                 .then(files => res.send(files))
@@ -92,7 +132,7 @@ export class MusicController extends BaseController {
 
             this.setDuration(payload.tracks).then(tracksWithDuration => {
                 let albumDuration = 0;
-                
+
                 console.log('setDurationRES', tracksWithDuration);
                 payload.tracks = tracksWithDuration;
 
@@ -168,6 +208,28 @@ export class MusicController extends BaseController {
                 resolve(uid);
             });
         }));
+        return Promise.all(promises);
+    }
+
+    getTracksInfo(tracks: Array<any>) {
+        const promises: Array<Promise<AlbumTrackOutDto>> = tracks.map(track => {
+            return new Promise<AlbumTrackOutDto>((resolve, reject) => {
+                forkJoin(
+                    this.artistCtrl.getArtistById(track.artist),
+                    this.originalCtrl.getOriginalById(track.originalTitle)
+                ).subscribe(res => {
+                    track.artist = {
+                        _id: res[0]._id,
+                        name: res[0].name
+                    }
+                    track.originalTitle = {
+                        _id: res[1]._id,
+                        name: res[1].name
+                    }
+                    resolve(track);
+                }, err => reject(err));
+            });
+        });
         return Promise.all(promises);
     }
 }

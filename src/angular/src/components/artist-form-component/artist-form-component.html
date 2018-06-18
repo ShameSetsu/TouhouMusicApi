@@ -13,9 +13,17 @@
         <input type="url" placeholder="ホームページ" aria-label="Number" matInput formControlName="website">
         <mat-error>無効入力</mat-error>
     </mat-form-field>
+    <mat-card class="upload-label" (drop)="dropPicture($event)" (dragover)="allowDrop($event)">
+        <label class="label">アルバムアート</label>
+        <div class="img-label">
+            <img src="assets/img/upload-picture.png" draggable="true" (dragstart)="drag($event)">
+            <img class="status-icon" *ngIf="thumbnail" src="assets/img/confirm.png">
+            <img class="status-icon" *ngIf="!thumbnail" src="assets/img/cross-icon.png">
+        </div>
+    </mat-card>
 
     <div class="button-wrapper">
         <button mat-button (click)="close()">閉じる</button>
-        <button [disabled]="!artistForm.valid" mat-button (click)="post()">確かめる</button>
+        <button [disabled]="!artistForm.valid || !thumbnail" mat-button (click)="post()">確かめる</button>
     </div>
 </form>

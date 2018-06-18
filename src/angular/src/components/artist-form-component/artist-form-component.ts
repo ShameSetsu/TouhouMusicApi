@@ -13,6 +13,7 @@ import { MusicApiService } from '../../services/musicApiService';
 })
 export class ArtistFormComponent {
     artistForm: FormGroup;
+    thumbnail: any;
 
     constructor(
         public dialogRef: MatDialogRef<AlbumFormPage>,
@@ -27,12 +28,30 @@ export class ArtistFormComponent {
         });
     }
 
+    allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    dropPicture(ev) {
+        ev.preventDefault();
+        console.log('pic', ev.dataTransfer.files[0].type);
+        console.log('picLength', Object.values(ev.dataTransfer.files));
+        if (Object.values(ev.dataTransfer.files).length == 1 && ev.dataTransfer.files[0].type.split('/')[0] == 'image') {
+            console.log('setThumbnail');
+            this.thumbnail = ev.dataTransfer.files[0];
+        }
+    }
+
     close() {
         this.dialogRef.close(false);
     }
 
     post() {
-        this.musicService.postArtist(this.artistForm.value)
+        this.musicService.postArtist({thumbnail: this.thumbnail, artist: this.artistForm.value})
             .then(res => {
                 this.dialogRef.close(true);
             })

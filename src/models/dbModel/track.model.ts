@@ -1,6 +1,7 @@
 export type Track = {
     _id?: string,
     album: string,
+    albumThumbnail: string,
     trackNumber: number,
     originalTitle?: string,
     title: string,

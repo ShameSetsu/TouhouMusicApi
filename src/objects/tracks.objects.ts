@@ -3,6 +3,7 @@ import { Track } from "../models/dbModel/track.model";
 export const tracks: Array<Track> = [
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 1,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 54,
@@ -15,6 +16,7 @@ export const tracks: Array<Track> = [
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 2,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 371,
@@ -27,6 +29,7 @@ export const tracks: Array<Track> = [
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 3,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 214,
@@ -39,6 +42,7 @@ export const tracks: Array<Track> = [
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 4,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 285,
@@ -51,6 +55,7 @@ export const tracks: Array<Track> = [
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 5,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 49,
@@ -63,6 +68,7 @@ export const tracks: Array<Track> = [
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 6,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 261,
@@ -75,6 +81,7 @@ export const tracks: Array<Track> = [
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 7,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 305,
@@ -87,6 +94,7 @@ export const tracks: Array<Track> = [
     },
     {
         album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc',
+        albumThumbnail: '2a81eb96-6dac-11e8-adc0-fa7ae01bbebc',
         trackNumber: 8,
         artist: 'bc14fe66-6da4-11e8-adc0-fa7ae01bbebc',
         duration: 295,

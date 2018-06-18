@@ -33,9 +33,10 @@ export class MusicApiService {
                 console.log('postAlbum');
                 album.tracks.forEach((track, i) => {
                     console.log('TRACK', track, 'res[i]', res[1][i]);
-                    track.file = res[1][i]
+                    track.file = res[1][i];
+                    track.albumThumbnail = res[0];
                 });
-
+                album.thumbnail = res[0];
                 this.api.post('http://localhost:3000/api/album', album, options).subscribe(res => {
                     console.log('postAlbumRes', res);
                     resolve(res);
@@ -47,17 +48,25 @@ export class MusicApiService {
         });
     }
 
-    postArtist(artist) {
+    postArtist(payload: { thumbnail: any, artist: any }) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let options: RequestOptionsArgs = JSON.parse('{ "headers": "" }');
         options.headers = headers;
-        console.log('artist', artist);
+
+        let thumbnailPayload: FormData = new FormData();
+        thumbnailPayload.append('picture', payload.thumbnail);
+
+        console.log('artist', payload.artist);
         return new Promise<Response>((resolve, reject) => {
-            this.api.post('http://localhost:3000/api/artist', artist).subscribe(
-                res => resolve(res),
-                err => reject(err)
-            );
+            this.api.post('http://localhost:3000/api/artist/thumbnail', thumbnailPayload).subscribe(upload => {
+                payload.artist.thumbnail = upload[0];
+                this.api.post('http://localhost:3000/api/artist', payload.artist).subscribe(
+                    res => resolve(res),
+                    err => reject(err)
+                );
+            })
+
         });
     }
 

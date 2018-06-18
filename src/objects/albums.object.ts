@@ -12,4 +12,4 @@ export const albums: Array<Album> = [
         release: '2018-05-06',
         website: 'http://sound.jp/ankimo/SJ.xhtm'
     }
-]
+];

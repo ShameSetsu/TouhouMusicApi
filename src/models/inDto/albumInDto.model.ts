@@ -5,11 +5,11 @@ import { Album } from "../dbModel/album.model";
 export type AlbumInDto = {
     _id?: string,
     name: string,
+    artist: string,
+    thumbnail: string,
     release: string,
     event: string,
-    artist: string,
     tracks: Array<AlbumTrackInDto>,
-    thumbnail: string,
     website?: string
 }
 

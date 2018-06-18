@@ -1,6 +1,8 @@
 import { BaseController } from './baseController';
 import { Artist } from '../models/dbModel/artist.model';
 import { HttpStatus } from '../models/misc/httpStatus.enum';
+import { Settings } from '../settings';
+import * as uuidv1 from 'uuid/v1';
 
 export class ArtistController extends BaseController {
     constructor(app, mongo) {
@@ -8,6 +10,7 @@ export class ArtistController extends BaseController {
         this.dataAccess = mongo;
         this.initCollection('artist');
         app.get('/api/artist/all', this.getAllArtists());
+        app.post('/api/artist/thumbnail', this.postArtistThumbnail());
         app.post('/api/artist', this.postOneArtist());
     }
 
@@ -22,6 +25,16 @@ export class ArtistController extends BaseController {
                     throw (err);
                 }
             });
+        }
+    }
+
+    postArtistThumbnail = () =>{
+        return (req, res) => {
+            if (!req.files)
+                return res.status(HttpStatus.BAD_REQUEST).send('No files were uploaded.');
+            this.copyFile(Object.values(req.files)[0], 'thumbnail')
+                .then(fileId=>res.send([fileId]))
+                .catch(err=>res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err));
         }
     }
 
@@ -45,5 +58,16 @@ export class ArtistController extends BaseController {
                 else resolve(result);
             });
         });
+    }
+
+    copyFile(file, folder): Promise<Array<string>> {
+        return new Promise((resolve, reject) => {
+            let uid = uuidv1();
+            file.mv(Settings.rootDir + '/public/' + folder + '/' + uid + '.' + file.name.split('.').pop(), (err) => {
+                if (err) reject(err);
+                resolve(uid);
+            });
+        });
+        
     }
 }

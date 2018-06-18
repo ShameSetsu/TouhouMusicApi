@@ -40,7 +40,16 @@ export class GenreController extends BaseController {
 
     getGenreById(_id: string): Promise<Genre> {
         return new Promise<Genre>((resolve, reject) => {
-            this.collection.findOne({ "_id": _id }, (err, result) => {
+            this.collection.findOne({ _id: _id }, (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
+        });
+    }
+
+    getGenresByIds(_ids: Array<string>){
+        return new Promise<Genre>((resolve, reject) => {
+            this.collection.find({ _id: { $in: _ids} }).toArray((err, result) => {
                 if (err) reject(err);
                 else resolve(result);
             });

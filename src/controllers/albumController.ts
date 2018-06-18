@@ -3,13 +3,15 @@ import * as express from 'express';
 import { AlbumInDto } from '../models/inDto/albumInDto.model';
 import { MongoServer } from '../Mongo';
 import { Album } from '../models/dbModel/album.model';
+import { BaseController } from './baseController';
 
-export class AlbumController {
+export class AlbumController extends BaseController{
     collection;
 
     constructor(app: express.Express, mongo: MongoServer) {
-        this.collection = mongo.dbConnection.collection('album');
-        //this.initCollection('album');
+        super();
+        this.dataAccess = mongo;
+        this.initCollection('album');
         app.get('/test/album', this.getAlbumTest());
     }
 
@@ -24,6 +26,15 @@ export class AlbumController {
                 }
             });
         }
+    }
+
+    getAllAlbum(): Promise<Array<Album>>{
+        return new Promise<Array<Album>>((resolve, reject)=>{
+            this.collection.find().toArray((err, result)=>{
+                if(err) reject(err);
+                resolve(result);
+            });
+        });
     }
 
     getAlbumById(_id: string): Promise<Album> {

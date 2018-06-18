@@ -11,6 +11,7 @@ import { EventFormComponent } from '../../components/event-form-component/event-
 import { GenreFormComponent } from '../../components/genre-form-component/genre-form-component';
 import { OriginalFormComponent } from '../../components/original-form-component/original-form-component';
 import { MusicApiService } from '../../services/musicApiService';
+import { AlbumTrackInDto } from '../../models/albumTrackInDto.model';
 
 
 @Component({
