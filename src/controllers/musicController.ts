@@ -38,6 +38,7 @@ export class MusicController extends BaseController {
         app.get('/api/album/test', this.getTestAlbum());
         app.get('/api/album/all', this.getAllAlbum());
         app.get('/api/track/all', this.getAllTracks());
+        app.get('/api/track', this.getTracks());
     }
 
     getAllTracks = () => {
@@ -47,6 +48,17 @@ export class MusicController extends BaseController {
                 this.getTracksInfo(tracksFound).then(tracks=>{
                     res.send(tracks);
                 })
+            })
+        }
+    }
+
+    getTracks = () =>{
+        return (req, res)=>{
+            this.trackCtrl.getTracks(req.query).then(tracksFound=>{
+                res.send(tracksFound)
+                // this.getTracksInfo(tracksFound).then(tracks=>{
+                //     res.send(tracks);
+                // })
             })
         }
     }

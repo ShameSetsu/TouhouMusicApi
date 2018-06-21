@@ -6,6 +6,15 @@ import { BaseController } from './baseController';
 import { GenreController } from './genreController';
 import { Settings } from '../settings';
 
+type TrackQueryParameters = {
+    page: number,
+    album?: string,
+    title?: string,
+    artist?: string,
+    genre?: string,
+    sort: string
+}
+
 export class TrackController extends BaseController {
 
     genreCtrl: GenreController;
@@ -31,6 +40,21 @@ export class TrackController extends BaseController {
                 .catch(err=>reject(err));
             });
         });
+    }
+
+    getTracks(query: TrackQueryParameters): Promise<any> {
+        return new Promise<any>((resolve, reject)=>{
+            resolve(this.buildTrackQuery(query))
+            // this.collection.find().toArray((err, result) => {
+            //     if(err) reject(err);
+            //     else this.getTrackGenres(result)
+            //     .then(res=>{
+            //         res.forEach(track => track.albumThumbnail = Settings.host + ':' + Settings.port + '/files/thumbnail/' + track.albumThumbnail + '.jpg');
+            //         resolve(res);
+            //     })
+            //     .catch(err=>reject(err));
+            // });
+        })
     }
 
     getTracksByAlbum(_id: string): Promise<Array<Track>> {
@@ -102,5 +126,14 @@ export class TrackController extends BaseController {
             })
         }))
         return Promise.all(promises);
+    }
+
+    buildTrackQuery(query: TrackQueryParameters){
+        let result = `{`;
+        if(query.album) result += result.length > 2 ? `,"album": "` + query.album + `"` : `"album": "` + query.album + `"`;
+        if(query.artist) result += result.length > 2 ? `,"artist": "` + query.artist + `"` : `"artist": "` + query.artist + `"`;
+        if(query.genre) result += result.length > 2 ? `,"genre": "` + query.genre + `"` : `"genre": "` + query.genre + `"`;
+        if(query.title) result += result.length > 2 ? `,"title": "` + query.title + `"` : `"title": "` + query.title + `"`;
+        return JSON.stringify(query) + '\n' + result;
     }
 }
