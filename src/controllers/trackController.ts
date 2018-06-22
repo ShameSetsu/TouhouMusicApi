@@ -44,16 +44,20 @@ export class TrackController extends BaseController {
 
     getTracks(query: TrackQueryParameters): Promise<any> {
         return new Promise<any>((resolve, reject)=>{
-            resolve(this.buildTrackQuery(query))
-            // this.collection.find().toArray((err, result) => {
-            //     if(err) reject(err);
-            //     else this.getTrackGenres(result)
-            //     .then(res=>{
-            //         res.forEach(track => track.albumThumbnail = Settings.host + ':' + Settings.port + '/files/thumbnail/' + track.albumThumbnail + '.jpg');
-            //         resolve(res);
-            //     })
-            //     .catch(err=>reject(err));
-            // });
+            console.log(query.sort ? query.sort == 'release' ? {release: 1} : query.sort == 'title' ? {title: 1} : {$natural: 1} : {$natural: 1});
+            this.collection.find(this.buildTrackQuery(query))
+            .skip(query.page ? (query.page - 1) * Settings.trackPerPage : 0)
+            .limit(query.page ? Settings.trackPerPage : 0)
+            .sort(query.sort ? query.sort == 'release' ? {release: 1} : query.sort == 'title' ? {title: 1} : {$natural: 1} : {$natural: 1})
+            .toArray((err, result) => {
+                if(err) reject(err);
+                else this.getTrackGenres(result)
+                .then(res=>{
+                    res.forEach(track => track.albumThumbnail = Settings.host + ':' + Settings.port + '/files/thumbnail/' + track.albumThumbnail + '.jpg');
+                    resolve(res);
+                })
+                .catch(err=>reject(err));
+            });
         })
     }
 
@@ -129,11 +133,13 @@ export class TrackController extends BaseController {
     }
 
     buildTrackQuery(query: TrackQueryParameters){
-        let result = `{`;
-        if(query.album) result += result.length > 2 ? `,"album": "` + query.album + `"` : `"album": "` + query.album + `"`;
-        if(query.artist) result += result.length > 2 ? `,"artist": "` + query.artist + `"` : `"artist": "` + query.artist + `"`;
-        if(query.genre) result += result.length > 2 ? `,"genre": "` + query.genre + `"` : `"genre": "` + query.genre + `"`;
-        if(query.title) result += result.length > 2 ? `,"title": "` + query.title + `"` : `"title": "` + query.title + `"`;
-        return JSON.stringify(query) + '\n' + result;
+        let result = {};
+        if(query.album) result['album'] = query.album
+        if(query.artist) result['artist'] = query.artist;
+        if(query.genre) result['genre'] = query.genre;
+        if(query.title) result['title'] = new RegExp(query.title, 'gi'); // global + ignore case
+        
+        console.log(result);
+        return result;
     }
 }

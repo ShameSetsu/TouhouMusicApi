@@ -10,6 +10,7 @@
     "linux-start": "npm run init-dist; npm run angular; tsc; node dist/index.js",
     "start": "npm run backup & ng build & tsc & npm run apply-backup & node ./dist/index.js",
     "node": "npm run backup & tsc & npm run apply-backup & cls & node dist/index.js",
+    "node-fast": "tsc & node dist/index.js",
     "copy-files": "copyfiles -f src/public/music/* dist/public/music & copyfiles -f src/public/thumbnail/* dist/public/thumbnail",
     "test": "echo \"Error: no test specified\" && exit 1",
     "backup": "copyfiles -f dist/public/music/* backup/music & copyfiles -f dist/public/thumbnail/* backup/thumbnail & rd /s /q dist",

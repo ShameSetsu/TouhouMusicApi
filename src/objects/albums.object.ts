@@ -11,5 +11,16 @@ export const albums: Array<Album> = [
         nbTracks: 8,
         release: '2018-05-06',
         website: 'http://sound.jp/ankimo/SJ.xhtm'
+    },
+    {
+        _id: '1703668c-7660-11e8-adc0-fa7ae01bbebc',
+        name: 'Blind beliefs and twilight of divinity',
+        artist: '6bf9db0e-765f-11e8-adc0-fa7ae01bbebc',
+        thumbnail: '17036312-7660-11e8-adc0-fa7ae01bbebc',
+        duration: 3509,
+        event: 'd4becc34-7660-11e8-adc0-fa7ae01bbebc',
+        nbTracks: 9,
+        release: '2018-01-24',
+        website: 'http://cqw00157.wixsite.com/cd-library/mgcd-0008'
     }
 ];
