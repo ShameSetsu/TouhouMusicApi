@@ -37,14 +37,13 @@ export class MusicController extends BaseController {
         app.post('/api/album', this.postAlbum());
         app.get('/api/album/test', this.getTestAlbum());
         app.get('/api/album/all', this.getAllAlbum());
-        app.get('/api/track/all', this.getAllTracks());
         app.get('/api/track', this.getTracks());
+        app.get('/api/track/random', this.getRandomTracks());
     }
 
-    getAllTracks = () => {
+    getTracks = () =>{
         return (req, res)=>{
-            console.log('req.body', req.body);
-            this.trackCtrl.getAllTracks().then(tracksFound=>{
+            this.trackCtrl.getTracks(req.query).then(tracksFound=>{
                 this.getTracksInfo(tracksFound).then(tracks=>{
                     res.send(tracks);
                 })
@@ -52,14 +51,13 @@ export class MusicController extends BaseController {
         }
     }
 
-    getTracks = () =>{
+    getRandomTracks = () =>{
         return (req, res)=>{
-            this.trackCtrl.getTracks(req.query).then(tracksFound=>{
-                res.send(tracksFound)
-                // this.getTracksInfo(tracksFound).then(tracks=>{
-                //     res.send(tracks);
-                // })
-            })
+            this.trackCtrl.getRandomTracks().then(tracksFound=>{
+                this.getTracksInfo(tracksFound).then(tracks=>{
+                    res.send(tracks);
+                });
+            });
         }
     }
 
@@ -67,7 +65,7 @@ export class MusicController extends BaseController {
         return (req, res) => {
             this.albumCtrl.getAlbumById('0f717066-6dab-11e8-adc0-fa7ae01bbebc').then((album: any) => {
                 forkJoin(
-                    this.trackCtrl.getTracksByAlbum('0f717066-6dab-11e8-adc0-fa7ae01bbebc'),
+                    this.trackCtrl.getTracks({page: 0, album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc'}),
                     this.artistCtrl.getArtistById(album.artist),
                     this.eventCtrl.getEventById(album.event)
                 ).subscribe((response: any) => {
@@ -90,7 +88,7 @@ export class MusicController extends BaseController {
                 const promises: Array<Promise<any>> = albums.map(album => {
                     return new Promise((resolve, reject) => {
                         forkJoin(
-                            this.trackCtrl.getTracksByAlbum('0f717066-6dab-11e8-adc0-fa7ae01bbebc'),
+                            this.trackCtrl.getTracks({page: 0, album: '0f717066-6dab-11e8-adc0-fa7ae01bbebc'}),
                             this.artistCtrl.getArtistById(album.artist),
                             this.eventCtrl.getEventById(album.event)
                         ).subscribe((response: any) => {
