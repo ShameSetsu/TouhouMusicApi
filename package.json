@@ -7,7 +7,7 @@
     "babel-node": "babel-node --presets=latest",
     "apply-fixture": "node dist/scripts/populate.js",
     "linux-build": "npm run linux-init-dist; npm build; tsc",
-    "linux-start": "npm run linux-init-dist; ng build; tsc; node dist/index.js",
+    "linux-start": "npm run linux-init-dist; ng build; cp -R src/public dist/; tsc; node dist/index.js",
     "start": "npm run backup & ng build & tsc & npm run apply-backup & node ./dist/index.js",
     "node": "npm run backup & tsc & npm run apply-backup & cls & node dist/index.js",
     "node-fast": "tsc & node dist/index.js",
