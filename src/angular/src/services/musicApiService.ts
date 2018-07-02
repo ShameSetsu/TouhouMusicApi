@@ -3,6 +3,7 @@ import { Headers, RequestOptionsArgs, Response } from '@angular/http';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 
 import { ApiService } from './apiService';
+import { Settings } from '../settings';
 
 @Injectable()
 export class MusicApiService {
@@ -26,8 +27,8 @@ export class MusicApiService {
 
         return new Promise<Response>((resolve, reject) => {
             forkJoin(
-                this.api.post('http://localhost:3000/api/album/thumbnail', picturePayload),
-                this.api.post('http://localhost:3000/api/album/tracks', tracksPayload)
+                this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/album/thumbnail', picturePayload),
+                this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/album/tracks', tracksPayload)
             ).subscribe(res => {
                 console.log('forkJoin res', res);
                 console.log('postAlbum');
@@ -37,7 +38,7 @@ export class MusicApiService {
                     track.albumThumbnail = res[0];
                 });
                 album.thumbnail = res[0];
-                this.api.post('http://localhost:3000/api/album', album, options).subscribe(res => {
+                this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/album', album, options).subscribe(res => {
                     console.log('postAlbumRes', res);
                     resolve(res);
                 }, err => {
@@ -59,9 +60,9 @@ export class MusicApiService {
 
         console.log('artist', payload.artist);
         return new Promise<Response>((resolve, reject) => {
-            this.api.post('http://localhost:3000/api/artist/thumbnail', thumbnailPayload).subscribe(upload => {
+            this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/artist/thumbnail', thumbnailPayload).subscribe(upload => {
                 payload.artist.thumbnail = upload[0];
-                this.api.post('http://localhost:3000/api/artist', payload.artist).subscribe(
+                this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/artist', payload.artist).subscribe(
                     res => resolve(res),
                     err => reject(err)
                 );
@@ -77,7 +78,7 @@ export class MusicApiService {
         options.headers = headers;
         console.log('genre', genre);
         return new Promise<Response>((resolve, reject) => {
-            this.api.post('http://localhost:3000/api/genre', genre).subscribe(
+            this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/genre', genre).subscribe(
                 res => resolve(res),
                 err => reject(err)
             );
@@ -91,7 +92,7 @@ export class MusicApiService {
         options.headers = headers;
         console.log('event', event);
         return new Promise<Response>((resolve, reject) => {
-            this.api.post('http://localhost:3000/api/event', event).subscribe(
+            this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/event', event).subscribe(
                 res => resolve(res),
                 err => reject(err)
             );
@@ -105,7 +106,7 @@ export class MusicApiService {
         options.headers = headers;
         console.log('event', original);
         return new Promise<Response>((resolve, reject) => {
-            this.api.post('http://localhost:3000/api/original', original).subscribe(
+            this.api.post(Settings.ApiUri + ':' + Settings.ApiPort + '/api/original', original).subscribe(
                 res => resolve(res),
                 err => reject(err)
             );
@@ -114,7 +115,7 @@ export class MusicApiService {
 
     getAllArtists(): Promise<Array<{ _id: string, name: string }>> {
         return new Promise<Array<{ _id: string, name: string }>>((resolve, reject) => {
-            this.api.get('http://localhost:3000/api/artist/all').subscribe((res: any) => {
+            this.api.get(Settings.ApiUri + ':' + Settings.ApiPort + '/api/artist/all').subscribe((res: any) => {
                 resolve(res);
             }, err => reject(err));
         });
@@ -122,7 +123,7 @@ export class MusicApiService {
 
     getAllGenres(): Promise<Array<{ _id: string, name: string }>> {
         return new Promise<Array<{ _id: string, name: string }>>((resolve, reject) => {
-            this.api.get('http://localhost:3000/api/genre/all').subscribe((res: any) => {
+            this.api.get(Settings.ApiUri + ':' + Settings.ApiPort + '/api/genre/all').subscribe((res: any) => {
                 resolve(res);
             }, err => reject(err));
         });
@@ -130,7 +131,7 @@ export class MusicApiService {
 
     getAllEvents(): Promise<Array<{ _id: string, name: string, date: string }>> {
         return new Promise<Array<{ _id: string, name: string, date: string }>>((resolve, reject) => {
-            this.api.get('http://localhost:3000/api/event/all').subscribe((res: any) => {
+            this.api.get(Settings.ApiUri + ':' + Settings.ApiPort + '/api/event/all').subscribe((res: any) => {
                 resolve(res);
             }, err => reject(err));
         });
@@ -138,7 +139,7 @@ export class MusicApiService {
     //api/original/all
     getAllOriginals(): Promise<Array<{ _id: string, name: string, touhou: number }>> {
         return new Promise<Array<{ _id: string, name: string, touhou: number }>>((resolve, reject) => {
-            this.api.get('http://localhost:3000/api/original/all').subscribe((res: any) => {
+            this.api.get(Settings.ApiUri + ':' + Settings.ApiPort + '/api/original/all').subscribe((res: any) => {
                 resolve(res);
             }, err => reject(err));
         });
